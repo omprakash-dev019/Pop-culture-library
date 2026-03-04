@@ -1,0 +1,172 @@
+*{
+    background-color: black;
+}
+.dc-card {
+  width: 21rem;
+  height: 32rem;
+  border-radius: 16px;
+  overflow: hidden;
+  background-color: #E3DBBB;
+  color: white;
+}
+
+/* Image */
+.bat-image {
+  width: 20rem;
+  height: 22rem;
+  object-fit: cover;
+  display: block;
+  border-radius: 12px;
+  position: relative;
+  left: 0.4rem;
+  top: 0.4rem;
+}
+.marvel-card {
+  width: 21rem;
+  height: 32rem;
+  border-radius: 16px;
+  overflow: hidden;
+  background-color: #E3DBBB;
+  color: white;
+}
+p{
+    background-color: transparent;
+    color: black;
+    text-wrap: initial;
+}
+/* Image */
+.ironman-image {
+  width: 20rem;
+  height: 22rem;
+  object-fit: cover;
+  display: block;
+  border-radius: 12px;
+  position: relative;
+  left: 0.4rem;
+  top: 0.4rem;
+}
+.container{
+    display: flex;
+    justify-content: space-evenly;
+    padding-top: 5rem;
+}
+a{
+    background-color: transparent;
+    color: rgb(56, 55, 55);
+    font-weight: 600;
+}
+button{
+    position: relative;
+    left : 4rem;
+    top:2.7rem;
+    background-color: #AEB784;
+    border-radius: 8px;
+    box-sizing: border-box;
+    width: 13rem;
+    height: 4rem;
+     transition: transform 0.3s ease;
+}
+button:hover{
+    transform: scale(1.05);
+}
+.heading{
+    color: white;
+    text-align: center;
+    font-size: 54px;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+
+}
+.char{
+      width: 21rem;
+  height: 32rem;
+  border-radius: 16px;
+  overflow: hidden;
+  background-color: #E3DBBB;
+  color: white;
+  transition: transform 0.3s ease;
+}
+.char-container{
+     display: grid;
+  grid-template-columns: repeat(auto-fill, 21rem);
+  gap: 1.5rem;
+  justify-content: center;
+  padding: 2rem;
+}
+.global-image{
+      width: 20rem;
+  height: 31rem;
+  object-fit: cover;
+  display: block;
+  border-radius: 12px;
+  position: relative;
+  left: 0.47rem;
+  top: 0.47rem;
+  transition: transform 0.3s ease;
+}
+.global-image:hover,.char:hover{
+    transform: scale(1.05);
+}
+.hero-name{
+    text-align: center;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-weight: 700;
+    font-size: 32px;
+}
+.liquid-glass {
+  position: relative;
+  padding: 20px;
+  border-radius: 20px;
+  box-sizing: border-box;
+  width: 19rem;
+  height: 7rem;
+  position: relative;
+  left:0.9rem;
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(10px) saturate(140%);
+  -webkit-backdrop-filter: blur(10px) saturate(140%);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow:
+    inset 0 1px 1px rgba(255,255,255,0.25),
+    inset 0 -10px 20px rgba(0,0,0,0.2),
+    0 10px 30px rgba(0,0,0,0.4);
+     transition: transform 0.3s ease;
+}
+.liquid-glass{
+    position: relative;
+    top: -7rem;
+}
+h3{
+    font-size: 12px;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-weight: 200;
+    color: rgb(170, 160, 160);
+
+}
+h2{
+    text-align: left;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    line-height: 20px;
+    transform: scaleY(1.5);  
+     letter-spacing: 1px;  
+}
+h2,h3{
+    background-color: transparent;
+    position: relative;
+    top: -10px;
+}
+.liquid-glass:hover{
+    transform: scale(1.05);
+}
+.a1st{
+    font-size: 23px;
+}
+.a1st-2{
+    font-size: 19px;
+}
+.a1st-3{
+    font-size: 17px;
+}
+.spc{
+    position: relative;
+    left: 18px
+}
