@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thor · God of Thunder · Minimal divine dashboard</title>
+    <!-- fonts & icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,600;14..32,700&family=Plus+Jakarta+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #0b1117;  /* deep stormy blue-black */
+            font-family: 'Inter', 'Plus Jakarta Sans', sans-serif;
+            color: #dae2ed;
+            line-height: 1.5;
+            -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
+        }
+
+        /* smooth background mist / clouds – subtle parallax layer */
+        .mist {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background: radial-gradient(circle at 30% 40%, rgba(90, 140, 200, 0.08) 0%, transparent 40%),
+                        radial-gradient(circle at 80% 70%, rgba(180, 170, 220, 0.05) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 0;
+            transform: translateZ(0);
+            will-change: transform;
+            animation: mistMove 24s infinite alternate ease-in-out;
+        }
+
+        @keyframes mistMove {
+            0% { transform: scale(1) translate(0%, 0%); opacity: 0.5; }
+            100% { transform: scale(1.1) translate(-2%, -2%); opacity: 0.9; }
+        }
+
+        /* floating sparks (minimal particles) */
+        .sparks {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .spark {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: rgba(255, 215, 0, 0.5);
+            border-radius: 50%;
+            box-shadow: 0 0 8px gold;
+            animation: floatSpark 10s infinite linear;
+        }
+
+        @keyframes floatSpark {
+            0% { transform: translateY(100vh) scale(0.5); opacity: 0; }
+            10% { opacity: 0.8; }
+            90% { opacity: 0.5; }
+            100% { transform: translateY(-10vh) scale(1.2); opacity: 0; }
+        }
+
+        /* main container */
+        .container {
+            max-width: 1300px;
+            margin: 0 auto;
+            padding: 3rem 2rem 6rem;
+            position: relative;
+            z-index: 5;
+        }
+
+        /* --- hero --- */
+        .hero {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 85vh;
+            text-align: center;
+            position: relative;
+            margin-bottom: 2rem;
+        }
+
+        .hero h1 {
+            font-size: clamp(5rem, 20vw, 12rem);
+            font-weight: 700;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            letter-spacing: -0.02em;
+            background: linear-gradient(135deg, #ffffff 0%, #c0d0e0 80%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 30px rgba(210, 180, 140, 0.2);
+            position: relative;
+            z-index: 10;
+            animation: godlyPulse 4s infinite ease-in-out;
+        }
+
+        @keyframes godlyPulse {
+            0% { text-shadow: 0 0 20px rgba(255, 215, 0, 0.2), 0 0 40px rgba(100, 150, 255, 0.2); }
+            50% { text-shadow: 0 0 40px rgba(255, 215, 0, 0.6), 0 0 80px rgba(70, 130, 255, 0.5); }
+            100% { text-shadow: 0 0 20px rgba(255, 215, 0, 0.2), 0 0 40px rgba(100, 150, 255, 0.2); }
+        }
+
+        /* lightning behind text (subtle) */
+        .lightning-bg {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, rgba(255,230,90,0.1) 0%, transparent 60%);
+            filter: blur(40px);
+            animation: lightningFlicker 5s infinite;
+            pointer-events: none;
+        }
+
+        @keyframes lightningFlicker {
+            0%, 95%, 98% { opacity: 0.2; }
+            96% { opacity: 0.8; }
+            99% { opacity: 0.3; }
+        }
+
+        .hero-sub {
+            font-size: 1.2rem;
+            font-weight: 300;
+            letter-spacing: 6px;
+            text-transform: uppercase;
+            color: #a1b5cd;
+            margin-top: -1.5rem;
+            border-top: 1px solid rgba(230, 210, 100, 0.4);
+            padding-top: 1.5rem;
+            display: inline-block;
+        }
+
+        /* --- section styling --- */
+        .section-title {
+            font-size: 2rem;
+            font-weight: 400;
+            letter-spacing: -0.01em;
+            margin: 4rem 0 2rem;
+            color: #e5ecf5;
+            border-left: 4px solid #e8c35c;
+            padding-left: 1.5rem;
+            text-transform: uppercase;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-weight: 300;
+            position: relative;
+        }
+
+        .section-title i {
+            color: #e8c35c;
+            margin-right: 0.8rem;
+            font-size: 1.8rem;
+            vertical-align: middle;
+        }
+
+        /* card grid */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .card {
+            background: rgba(15, 25, 35, 0.7);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(210, 190, 140, 0.2);
+            border-radius: 28px;
+            padding: 2rem 1.5rem;
+            transition: all 0.2s ease;
+            box-shadow: 0 10px 20px -10px rgba(0,0,0,0.5);
+            color: #cfdeed;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(255, 215, 0, 0.4);
+            box-shadow: 0 16px 32px -12px #000, 0 0 0 1px rgba(230, 210, 60, 0.2);
+            background: rgba(20, 32, 45, 0.8);
+        }
+
+        .card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,240,0.03), transparent);
+            transition: left 0.6s;
+        }
+
+        .card:hover::after {
+            left: 100%;
+        }
+
+        .card-icon {
+            font-size: 2.5rem;
+            color: #e8c35c;
+            margin-bottom: 1.2rem;
+            filter: drop-shadow(0 0 8px rgba(255,215,0,0.3));
+        }
+
+        .card h3 {
+            font-weight: 500;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            letter-spacing: 0.5px;
+            border-bottom: 1px dashed #3a4b5e;
+            padding-bottom: 0.5rem;
+        }
+
+        .card p, .card li {
+            font-weight: 300;
+            color: #b2c6dd;
+            font-size: 0.95rem;
+        }
+
+        /* small card for allies/enemies (compact) */
+        .mini-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+        }
+
+        .mini-card {
+            background: rgba(0,0,0,0.2);
+            border-radius: 20px;
+            padding: 1rem;
+            text-align: center;
+            backdrop-filter: blur(4px);
+            border: 1px solid rgba(255,215,0,0.15);
+            transition: 0.15s;
+        }
+
+        .mini-card:hover {
+            border-color: #e8c35c;
+            background: rgba(30,40,55,0.8);
+            transform: scale(1.02);
+        }
+
+        .mini-card i {
+            font-size: 2rem;
+            color: #b2c6dd;
+            margin-bottom: 0.4rem;
+        }
+
+        .mini-card h4 {
+            font-weight: 500;
+            font-size: 1.1rem;
+        }
+
+        .mini-card p {
+            font-size: 0.75rem;
+            opacity: 0.8;
+        }
+
+        /* timeline */
+        .timeline-h {
+            display: flex;
+            gap: 2rem;
+            overflow-x: auto;
+            padding: 1.5rem 0.5rem;
+            scrollbar-width: thin;
+            scrollbar-color: #e8c35c #1e2c38;
+        }
+
+        .timeline-item {
+            min-width: 200px;
+            background: rgba(20,32,45,0.5);
+            border-radius: 30px;
+            padding: 1.5rem;
+            border-left: 3px solid #e8c35c;
+            backdrop-filter: blur(8px);
+            transition: 0.2s;
+        }
+
+        .timeline-item:hover {
+            background: rgba(30,45,60,0.8);
+            border-left-color: gold;
+        }
+
+        .timeline-year {
+            font-size: 1.8rem;
+            font-weight: 300;
+            color: #e8c35c;
+        }
+
+        /* comics horizontal scroll */
+        .comics-scroll {
+            display: flex;
+            gap: 1.8rem;
+            overflow-x: auto;
+            padding: 1rem 0.2rem 2rem;
+        }
+
+        .comic-card {
+            min-width: 160px;
+            height: 220px;
+            background: linear-gradient(145deg, #1b2938, #0b1722);
+            border-radius: 18px;
+            border: 1px solid rgba(200,180,100,0.2);
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            padding: 1rem;
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: #d7e3f0;
+            transition: 0.2s;
+            box-shadow: 0 10px 18px -12px black;
+            text-align: center;
+            background-size: cover;
+            background-position: center;
+        }
+
+        .comic-card:hover {
+            transform: scale(1.04) translateY(-4px);
+            border-color: #e8c35c;
+            box-shadow: 0 20px 30px -10px #000, 0 0 0 1px rgba(255,215,0,0.3);
+        }
+
+        /* utility */
+        .text-glow {
+            text-shadow: 0 0 10px rgba(255,215,0,0.3);
+        }
+
+        hr {
+            border: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, #e8c35c, transparent);
+            margin: 3rem 0;
+        }
+
+        /* scroll reveal (fade + up) */
+        .reveal {
+            opacity: 0;
+            transform: translateY(28px);
+            transition: opacity 0.7s ease, transform 0.7s ease;
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* responsive */
+        @media (max-width: 700px) {
+            .hero h1 { font-size: 5rem; }
+            .grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <!-- background mist & particles -->
+    <div class="mist"></div>
+    <div class="sparks" id="sparks"></div>
+
+    <div class="container">
+        <!-- hero -->
+        <section class="hero">
+            <div class="lightning-bg"></div>
+            <h1>THOR</h1>
+            <div class="hero-sub">GOD OF THUNDER · ODINSON</div>
+        </section>
+
+        <!-- origin story card (full width minimal) -->
+        <section class="reveal">
+            <div class="section-title"><i class="fas fa-scroll"></i> ORIGIN · ODIN'S HEIR</div>
+            <div class="card" style="max-width: 100%;">
+                <div class="card-icon"><i class="fas fa-feather-alt"></i></div>
+                <h3>Born of Asgard</h3>
+                <p>Thor Odinson, son of Odin and Jord (the earth goddess), was destined to be king of Asgard. His reckless pride led to banishment on Midgard, where he learned humility and became a true protector. Worthy of Mjolnir, he embraced his role as the God of Thunder, defending the Nine Realms.</p>
+                <p style="margin-top:1rem; font-style: italic; color: #b8c9e5;">“Whosoever holds this hammer, if he be worthy, shall possess the power of Thor.”</p>
+            </div>
+        </section>
+
+        <!-- Powers & abilities grid -->
+        <section class="reveal">
+            <div class="section-title"><i class="fas fa-bolt"></i> POWERS & ABILITIES</div>
+            <div class="grid">
+                <div class="card">
+                    <i class="fas fa-bolt card-icon"></i>
+                    <h3>Thorforce</h3>
+                    <p>Vast superhuman strength, control over lightning and storms. Can summon thunderbolts and create hurricanes.</p>
+                </div>
+                <div class="card">
+                    <i class="fas fa-shield-hammer card-icon"></i>
+                    <h3>Immortality</h3>
+                    <p>As an Asgardian, Thor ages slowly and is immune to disease. His godly constitution grants near-invulnerability.</p>
+                </div>
+                <div class="card">
+                    <i class="fas fa-feather card-icon"></i>
+                    <h3>Flight & Speed</h3>
+                    <p>Using Mjolnir or Stormbreaker, he can fly at incredible speeds across realms.</p>
+                </div>
+                <div class="card">
+                    <i class="fas fa-dragon card-icon"></i>
+                    <h3>Warrior's Skill</h3>
+                    <p>Millennia of combat training make him one of the most formidable hand-to-hand fighters.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Weapons & Artifacts -->
+        <section class="reveal">
+            <div class="section-title"><i class="fas fa-hammer"></i> WEAPONS & ARTIFACTS</div>
+            <div class="grid">
+                <div class="card">
+                    <i class="fas fa-hammer card-icon"></i>
+                    <h3>Mjolnir</h3>
+                    <p>The enchanted hammer forged in the heart of a dying star. Grants control of weather and returns when thrown.</p>
+                </div>
+                <div class="card">
+                    <i class="fas fa-axe-battle card-icon"></i>
+                    <h3>Stormbreaker</h3>
+                    <p>Ax-hammer crafted to counter the Infinity Gauntlet. Can summon the Bifrost and is even more powerful.</p>
+                </div>
+                <div class="card">
+                    <i class="fas fa-shield card-icon"></i>
+                    <h3>Odin's Armor</h3>
+                    <p>Belt of strength (Megingjörð) and the armored suit passed down from his father.</p>
+                </div>
+                <div class="card">
+                    <i class="fas fa-hat-wizard card-icon"></i>
+                    <h3>Járngreipr</h3>
+                    <p>The iron gloves necessary to wield Mjolnir’s power safely.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Allies & Enemies (two columns) -->
+        <section class="reveal">
+            <div class="section-title"><i class="fas fa-users"></i> ALLIES & ENEMIES</div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
+                <!-- allies -->
+                <div class="card" style="padding: 1.5rem;">
+                    <h3><i class="fas fa-handshake" style="color:#e8c35c;"></i> ALLIES</h3>
+                    <div class="mini-grid">
+                        <div class="mini-card"><i class="fas fa-female"></i><h4>Valkyrie</h4><p>Brunnhilde · Last Valkyrie</p></div>
+                        <div class="mini-card"><i class="fas fa-mask"></i><h4>Loki</h4><p>Brother, God of Mischief</p></div>
+                        <div class="mini-card"><i class="fas fa-eye"></i><h4>Heimdall</h4><p>Guardian of Bifrost</p></div>
+                        <div class="mini-card"><i class="fas fa-tree"></i><h4>Lady Sif</h4><p>Warrior of Asgard</p></div>
+                        <div class="mini-card"><i class="fas fa-users"></i><h4>Avengers</h4><p>Earth's mightiest</p></div>
+                        <div class="mini-card"><i class="fas fa-dragon"></i><h4>Beta Ray Bill</h4><p>Korbinite ally</p></div>
+                    </div>
+                </div>
+                <!-- enemies -->
+                <div class="card" style="padding: 1.5rem;">
+                    <h3><i class="fas fa-skull" style="color:#b33;"></i> ENEMIES</h3>
+                    <div class="mini-grid">
+                        <div class="mini-card"><i class="fas fa-hat-wizard"></i><h4>Hela</h4><p>Goddess of Death</p></div>
+                        <div class="mini-card"><i class="fas fa-snowman"></i><h4>Laufey</h4><p>King of Frost Giants</p></div>
+                        <div class="mini-card"><i class="fas fa-dragon"></i><h4>Malekith</h4><p>Dark Elf ruler</p></div>
+                        <div class="mini-card"><i class="fas fa-wolf"></i><h4>Fenrir</h4><p>Monstrous wolf</p></div>
+                        <div class="mini-card"><i class="fas fa-serpent"></i><h4>Jörmungandr</h4><p>Midgard serpent</p></div>
+                        <div class="mini-card"><i class="fas fa-fire"></i><h4>Surtur</h4><p>Fire demon</p></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Timeline & Adventures (horizontal) -->
+        <section class="reveal">
+            <div class="section-title"><i class="fas fa-timeline"></i> TIMELINE · LEGENDARY DEEDS</div>
+            <div class="timeline-h">
+                <div class="timeline-item"><span class="timeline-year">~1000 AD</span><br>Born to Odin, raised in Asgard</div>
+                <div class="timeline-item"><span class="timeline-year">965 AD</span><br>First war against Frost Giants</div>
+                <div class="timeline-item"><span class="timeline-year">2010</span><br>Banishment to Earth · becomes Avenger</div>
+                <div class="timeline-item"><span class="timeline-year">2013</span><br>Dark Elves attack · Malekith</div>
+                <div class="timeline-item"><span class="timeline-year">2017</span><br>Ragnarok · destruction of Asgard</div>
+                <div class="timeline-item"><span class="timeline-year">2018</span><br>Thanos · Stormbreaker · the snap</div>
+                <div class="timeline-item"><span class="timeline-year">2023</span><br>Final battle · becomes All-Father</div>
+            </div>
+        </section>
+
+        <!-- Featured Comics horizontal scroll -->
+        <section class="reveal">
+            <div class="section-title"><i class="fas fa-book-open"></i> FEATURED COMICS</div>
+            <div class="comics-scroll">
+                <div class="comic-card" style="background-image: linear-gradient(145deg, #3e2b1a, #131d2b);">Journey into Mystery #83</div>
+                <div class="comic-card" style="background-image: linear-gradient(145deg, #2b4f6e, #0c1f2c);">Thor #337 (1983)</div>
+                <div class="comic-card" style="background-image: linear-gradient(145deg, #4d291c, #0f121b);">Thor: God of Thunder #1</div>
+                <div class="comic-card" style="background-image: linear-gradient(145deg, #3a5266, #080f17);">The Mighty Thor #700</div>
+                <div class="comic-card" style="background-image: linear-gradient(145deg, #633e1f, #141e30);">Thor (2020) #1</div>
+                <div class="comic-card" style="background-image: linear-gradient(145deg, #263b4a, #0e1a28);">War of the Realms</div>
+            </div>
+        </section>
+
+        <!-- subtle divider -->
+        <hr>
+
+        <!-- footer / Asgardian blessing (minimal) -->
+        <div style="text-align: center; opacity: 0.6; font-weight: 300; letter-spacing: 2px; padding: 3rem 0 1rem;">
+            <i class="fas fa-bolt" style="color: #e8c35c;"></i> · TIL VALHALL · <i class="fas fa-bolt" style="color: #e8c35c;"></i>
+        </div>
+    </div>
+
+    <!-- scroll reveal and spark generation -->
+    <script>
+        (function() {
+            // Intersection Observer for reveal
+            const reveals = document.querySelectorAll('.reveal');
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('active');
+                    }
+                });
+            }, { threshold: 0.15, rootMargin: '0px 0px -20px 0px' });
+            reveals.forEach(r => observer.observe(r));
+
+            // generate floating sparks (minimal)
+            const sparksContainer = document.getElementById('sparks');
+            for (let i = 0; i < 25; i++) {
+                const spark = document.createElement('div');
+                spark.classList.add('spark');
+                spark.style.left = Math.random() * 100 + '%';
+                spark.style.animationDelay = Math.random() * 8 + 's';
+                spark.style.animationDuration = 8 + Math.random() * 10 + 's';
+                spark.style.opacity = 0.3 + Math.random() * 0.3;
+                sparksContainer.appendChild(spark);
+            }
+
+            // subtle parallax on mist (mouse move)
+            const mist = document.querySelector('.mist');
+            document.addEventListener('mousemove', (e) => {
+                const x = (e.clientX / window.innerWidth - 0.5) * 10;
+                const y = (e.clientY / window.innerHeight - 0.5) * 8;
+                mist.style.transform = `translate(${x}px, ${y}px) scale(1.05)`;
+            });
+
+            // add a tiny electric pulse animation on hover for any card icon (just for fun)
+            const icons = document.querySelectorAll('.card-icon');
+            icons.forEach(icon => {
+                icon.addEventListener('mouseenter', () => {
+                    icon.style.animation = 'none';
+                    icon.offsetHeight;
+                    icon.style.animation = 'godlyPulse 0.6s ease';
+                });
+            });
+        })();
+    </script>
+
+    <!-- small extra animation style for pulse -->
+    <style>
+        @keyframes godlyPulse {
+            0% { filter: drop-shadow(0 0 5px gold); transform: scale(1); }
+            50% { filter: drop-shadow(0 0 20px gold) drop-shadow(0 0 30px #7aaff0); transform: scale(1.1); }
+            100% { filter: drop-shadow(0 0 5px gold); transform: scale(1); }
+        }
+    </style>
+</body>
+</html>

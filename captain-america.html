@@ -1,0 +1,2607 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Captain America — Marvel Character Archive</title>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;600;700&family=Bebas+Neue&family=Rajdhani:wght@300;400;500;600;700&family=Special+Elite&display=swap" rel="stylesheet">
+<style>
+:root {
+  --navy: #050d1a;
+  --navy-mid: #0a1628;
+  --navy-light: #102040;
+  --navy-panel: #0d1e38;
+  --crimson: #c41e3a;
+  --crimson-light: #e8233f;
+  --crimson-dark: #8b0f20;
+  --silver: #a8b4c0;
+  --silver-light: #d0dae4;
+  --silver-dark: #5a6472;
+  --gold: #c8a862;
+  --white: #f0f4f8;
+  --star-white: #e8eef5;
+  --glow-blue: rgba(50,120,220,0.4);
+  --glow-red: rgba(196,30,58,0.5);
+  --glow-silver: rgba(168,180,192,0.3);
+  --metal-gradient: linear-gradient(135deg, #1a2a3a 0%, #0d1e38 30%, #162840 60%, #0a1628 100%);
+}
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--navy);
+  color: var(--white);
+  font-family: 'Rajdhani', sans-serif;
+  overflow-x: hidden;
+  cursor: none;
+}
+
+/* CUSTOM CURSOR */
+.cursor {
+  position: fixed;
+  width: 20px; height: 20px;
+  border: 2px solid var(--crimson);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 9999;
+  transform: translate(-50%, -50%);
+  transition: all 0.1s ease;
+  mix-blend-mode: difference;
+}
+.cursor-dot {
+  position: fixed;
+  width: 6px; height: 6px;
+  background: var(--star-white);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 9999;
+  transform: translate(-50%, -50%);
+}
+
+/* NOISE TEXTURE OVERLAY */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 1000;
+  opacity: 0.4;
+}
+
+/* ===== SCROLLBAR ===== */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--navy); }
+::-webkit-scrollbar-thumb { background: var(--crimson); border-radius: 3px; }
+
+/* ===== PARTICLES CANVAS ===== */
+#particles-canvas {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0.6;
+}
+
+/* ===== HERO SECTION ===== */
+.hero {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background: radial-gradient(ellipse at 50% 40%, #0f2a4a 0%, #060e1c 60%, var(--navy) 100%);
+}
+
+.hero-bg-rings {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+/* THE SHIELD */
+.shield-container {
+  position: absolute;
+  width: 700px; height: 700px;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  animation: shield-float 6s ease-in-out infinite;
+}
+
+@keyframes shield-float {
+  0%, 100% { transform: translate(-50%, -50%) translateY(0); }
+  50% { transform: translate(-50%, -50%) translateY(-15px); }
+}
+
+.shield-svg {
+  width: 100%; height: 100%;
+  filter: drop-shadow(0 0 40px rgba(196,30,58,0.3)) drop-shadow(0 0 80px rgba(50,100,200,0.2));
+  animation: shield-spin-slow 60s linear infinite;
+}
+
+@keyframes shield-spin-slow {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.shield-glow {
+  position: absolute;
+  inset: -20px;
+  border-radius: 50%;
+  background: radial-gradient(circle, transparent 40%, rgba(196,30,58,0.1) 70%, transparent 100%);
+  animation: glow-pulse 3s ease-in-out infinite;
+}
+
+@keyframes glow-pulse {
+  0%, 100% { opacity: 0.5; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.05); }
+}
+
+/* LIGHT SWEEP */
+.shield-sweep {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: linear-gradient(45deg, transparent 30%, rgba(255,255,255,0.08) 50%, transparent 70%);
+  animation: sweep 4s ease-in-out infinite;
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+@keyframes sweep {
+  0% { transform: rotate(-30deg); opacity: 0; }
+  20% { opacity: 1; }
+  80% { opacity: 1; }
+  100% { transform: rotate(200deg); opacity: 0; }
+}
+
+/* HERO CONTENT */
+.hero-content {
+  position: relative;
+  z-index: 10;
+  text-align: center;
+  animation: hero-reveal 1.5s cubic-bezier(0.16,1,0.3,1) forwards;
+}
+
+@keyframes hero-reveal {
+  from { opacity: 0; transform: translateY(40px) scale(0.95); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.hero-eyebrow {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.5em;
+  color: var(--crimson-light);
+  text-transform: uppercase;
+  margin-bottom: 12px;
+  opacity: 0;
+  animation: fade-up 0.8s 0.3s forwards;
+}
+
+.hero-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(5rem, 14vw, 12rem);
+  line-height: 0.85;
+  letter-spacing: 0.02em;
+  color: transparent;
+  background: linear-gradient(180deg, #ffffff 0%, #d0dae4 40%, #8a9ab0 80%, #4a6080 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  text-shadow: none;
+  position: relative;
+  filter: drop-shadow(0 4px 20px rgba(50,100,200,0.5));
+  opacity: 0;
+  animation: title-cinematic 1.2s 0.6s cubic-bezier(0.16,1,0.3,1) forwards;
+}
+
+@keyframes title-cinematic {
+  from { opacity: 0; transform: scale(1.3) translateY(-20px); filter: blur(10px) drop-shadow(0 4px 20px rgba(50,100,200,0.5)); }
+  to { opacity: 1; transform: scale(1) translateY(0); filter: blur(0) drop-shadow(0 4px 20px rgba(50,100,200,0.5)); }
+}
+
+.hero-subtitle {
+  font-family: 'Oswald', sans-serif;
+  font-size: clamp(1.2rem, 3vw, 2rem);
+  font-weight: 300;
+  letter-spacing: 0.3em;
+  color: var(--silver);
+  text-transform: uppercase;
+  margin-top: 8px;
+  opacity: 0;
+  animation: fade-up 0.8s 1s forwards;
+}
+
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.hero-divider {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  justify-content: center;
+  margin: 24px 0;
+  opacity: 0;
+  animation: fade-up 0.8s 1.3s forwards;
+}
+
+.hero-divider-line {
+  width: 80px; height: 1px;
+  background: linear-gradient(90deg, transparent, var(--crimson), transparent);
+}
+
+.hero-divider-star {
+  width: 20px; height: 20px;
+  fill: var(--crimson);
+  animation: star-spin 8s linear infinite;
+}
+
+@keyframes star-spin {
+  from { transform: rotate(0); }
+  to { transform: rotate(360deg); }
+}
+
+.hero-meta {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 0.8rem;
+  letter-spacing: 0.25em;
+  color: var(--silver-dark);
+  text-transform: uppercase;
+  opacity: 0;
+  animation: fade-up 0.8s 1.5s forwards;
+}
+
+.hero-scroll {
+  position: absolute;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  opacity: 0;
+  animation: fade-up 0.8s 2s forwards;
+}
+
+.hero-scroll span {
+  font-size: 0.7rem;
+  letter-spacing: 0.3em;
+  color: var(--silver-dark);
+  text-transform: uppercase;
+}
+
+.scroll-line {
+  width: 1px; height: 50px;
+  background: linear-gradient(to bottom, var(--crimson), transparent);
+  animation: scroll-pulse 2s ease-in-out infinite;
+}
+
+@keyframes scroll-pulse {
+  0%, 100% { transform: scaleY(1); opacity: 1; }
+  50% { transform: scaleY(0.5); opacity: 0.4; }
+}
+
+/* ===== NAV ===== */
+nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 500;
+  padding: 16px 48px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: linear-gradient(to bottom, rgba(5,13,26,0.95), transparent);
+  backdrop-filter: blur(10px);
+}
+
+.nav-logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.nav-shield {
+  width: 36px; height: 36px;
+}
+
+.nav-brand {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.4rem;
+  letter-spacing: 0.1em;
+  color: var(--white);
+}
+
+.nav-brand span { color: var(--crimson); }
+
+.nav-links {
+  display: flex;
+  gap: 32px;
+  list-style: none;
+}
+
+.nav-links a {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--silver);
+  text-decoration: none;
+  transition: color 0.3s;
+  position: relative;
+}
+
+.nav-links a::after {
+  content: '';
+  position: absolute;
+  bottom: -4px; left: 0;
+  width: 0; height: 1px;
+  background: var(--crimson);
+  transition: width 0.3s;
+}
+
+.nav-links a:hover { color: var(--white); }
+.nav-links a:hover::after { width: 100%; }
+
+.nav-badge {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  color: var(--crimson-light);
+  border: 1px solid var(--crimson);
+  padding: 4px 12px;
+  text-transform: uppercase;
+}
+
+/* ===== MAIN CONTENT ===== */
+main {
+  position: relative;
+  z-index: 2;
+}
+
+/* ===== SECTION HEADERS ===== */
+.section-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 48px;
+}
+
+.section-num {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 5rem;
+  line-height: 1;
+  color: rgba(196,30,58,0.15);
+  letter-spacing: -0.02em;
+}
+
+.section-label {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.section-label-top {
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.4em;
+  color: var(--crimson);
+  text-transform: uppercase;
+}
+
+.section-label-title {
+  font-family: 'Oswald', sans-serif;
+  font-size: 2.5rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  color: var(--white);
+  text-transform: uppercase;
+}
+
+.section-line {
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(to right, var(--crimson-dark), transparent);
+}
+
+/* ===== CONTAINER ===== */
+.container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 48px;
+}
+
+/* ===== SECTION SPACING ===== */
+section {
+  padding: 100px 0;
+}
+
+/* ===== PANEL STYLES ===== */
+.panel {
+  background: var(--navy-panel);
+  border: 1px solid rgba(168,180,192,0.1);
+  position: relative;
+  overflow: hidden;
+}
+
+.panel::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(255,255,255,0.02) 0%, transparent 50%);
+  pointer-events: none;
+}
+
+.panel-corner {
+  position: absolute;
+  width: 20px; height: 20px;
+}
+.panel-corner::before, .panel-corner::after {
+  content: '';
+  position: absolute;
+  background: var(--crimson);
+}
+.panel-corner::before { width: 100%; height: 2px; }
+.panel-corner::after { width: 2px; height: 100%; }
+
+.panel-corner.tl { top: 0; left: 0; }
+.panel-corner.tr { top: 0; right: 0; transform: scaleX(-1); }
+.panel-corner.bl { bottom: 0; left: 0; transform: scaleY(-1); }
+.panel-corner.br { bottom: 0; right: 0; transform: scale(-1); }
+
+/* ===== METAL SCAN LINE ===== */
+.metal-scan {
+  position: absolute;
+  top: 0; left: -100%;
+  width: 60%; height: 100%;
+  background: linear-gradient(to right, transparent, rgba(255,255,255,0.04), transparent);
+  animation: metal-scan 4s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes metal-scan {
+  0% { left: -60%; }
+  100% { left: 160%; }
+}
+
+/* ===== ORIGIN SECTION ===== */
+.origin-section {
+  background: linear-gradient(180deg, var(--navy) 0%, #050f1e 100%);
+}
+
+.origin-grid {
+  display: grid;
+  grid-template-columns: 1.2fr 0.8fr;
+  gap: 32px;
+}
+
+.origin-document {
+  padding: 48px;
+  position: relative;
+  background: 
+    linear-gradient(rgba(10,22,40,0.92), rgba(10,22,40,0.92)),
+    repeating-linear-gradient(0deg, transparent, transparent 28px, rgba(255,255,255,0.02) 28px, rgba(255,255,255,0.02) 29px);
+}
+
+.doc-stamp {
+  position: absolute;
+  top: 24px; right: 24px;
+  width: 90px; height: 90px;
+  border: 3px solid rgba(196,30,58,0.6);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform: rotate(-15deg);
+  animation: stamp-pulse 3s ease-in-out infinite;
+}
+
+.doc-stamp-inner {
+  font-family: 'Oswald', sans-serif;
+  font-size: 0.55rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  color: rgba(196,30,58,0.8);
+  text-align: center;
+  text-transform: uppercase;
+  line-height: 1.3;
+}
+
+@keyframes stamp-pulse {
+  0%, 100% { box-shadow: 0 0 10px rgba(196,30,58,0.3); }
+  50% { box-shadow: 0 0 20px rgba(196,30,58,0.6); }
+}
+
+.doc-header {
+  margin-bottom: 32px;
+}
+
+.doc-classification {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.4em;
+  color: var(--crimson-light);
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+
+.doc-title {
+  font-family: 'Special Elite', serif;
+  font-size: 1.8rem;
+  color: var(--star-white);
+  margin-bottom: 16px;
+  line-height: 1.2;
+}
+
+.doc-meta {
+  display: flex;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+
+.doc-meta-item {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.doc-meta-label {
+  font-size: 0.6rem;
+  letter-spacing: 0.3em;
+  color: var(--silver-dark);
+  text-transform: uppercase;
+}
+
+.doc-meta-value {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--silver-light);
+}
+
+.doc-divider {
+  width: 100%; height: 1px;
+  background: linear-gradient(to right, var(--crimson-dark), rgba(196,30,58,0.1), transparent);
+  margin: 24px 0;
+}
+
+.doc-body {
+  font-family: 'Special Elite', serif;
+  font-size: 0.95rem;
+  line-height: 1.9;
+  color: rgba(208,218,228,0.85);
+  position: relative;
+}
+
+.doc-body p { margin-bottom: 16px; }
+.doc-body p:last-child { margin-bottom: 0; }
+
+.doc-highlight {
+  color: var(--star-white);
+  font-weight: 600;
+}
+
+/* WATERMARK */
+.watermark-star {
+  position: absolute;
+  bottom: -20px; right: -20px;
+  width: 200px; height: 200px;
+  opacity: 0.03;
+}
+
+/* ORIGIN SIDEBAR */
+.origin-sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.stat-card {
+  padding: 24px;
+  border-left: 3px solid var(--crimson);
+  background: rgba(255,255,255,0.02);
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s;
+}
+
+.stat-card:hover {
+  background: rgba(196,30,58,0.05);
+  transform: translateX(4px);
+}
+
+.stat-label {
+  font-size: 0.65rem;
+  letter-spacing: 0.35em;
+  color: var(--silver-dark);
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+
+.stat-value {
+  font-family: 'Oswald', sans-serif;
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: var(--white);
+  line-height: 1;
+}
+
+.stat-sub {
+  font-size: 0.8rem;
+  color: var(--silver);
+  margin-top: 4px;
+}
+
+.stat-bar {
+  margin-top: 12px;
+  height: 3px;
+  background: rgba(255,255,255,0.05);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.stat-bar-fill {
+  height: 100%;
+  background: linear-gradient(to right, var(--crimson-dark), var(--crimson-light));
+  border-radius: 2px;
+  transform-origin: left;
+  animation: bar-fill 1.5s cubic-bezier(0.16,1,0.3,1) forwards;
+  transform: scaleX(0);
+}
+
+@keyframes bar-fill {
+  to { transform: scaleX(1); }
+}
+
+/* ===== POWERS SECTION ===== */
+.powers-section {
+  background: linear-gradient(180deg, #050f1e 0%, var(--navy) 100%);
+}
+
+.powers-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2px;
+  background: rgba(168,180,192,0.05);
+}
+
+.power-cell {
+  background: var(--navy-panel);
+  padding: 36px 28px;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.4s cubic-bezier(0.16,1,0.3,1);
+  cursor: default;
+}
+
+.power-cell::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, var(--crimson-dark), transparent);
+  opacity: 0;
+  transition: opacity 0.4s;
+}
+
+.power-cell:hover { transform: scale(1.02); z-index: 2; }
+.power-cell:hover::before { opacity: 0.1; }
+
+.power-icon {
+  width: 48px; height: 48px;
+  margin-bottom: 20px;
+  color: var(--crimson);
+}
+
+.power-name {
+  font-family: 'Oswald', sans-serif;
+  font-size: 1.1rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--white);
+  margin-bottom: 12px;
+}
+
+.power-desc {
+  font-size: 0.85rem;
+  line-height: 1.7;
+  color: var(--silver);
+}
+
+.power-level {
+  display: flex;
+  gap: 4px;
+  margin-top: 16px;
+}
+
+.power-pip {
+  width: 20px; height: 4px;
+  background: var(--crimson);
+  border-radius: 2px;
+  opacity: 0.3;
+}
+
+.power-pip.active { opacity: 1; }
+
+/* ===== ALLIES SECTION ===== */
+.allies-section {
+  background: var(--navy);
+}
+
+.allies-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+
+.ally-card {
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+  transition: all 0.5s cubic-bezier(0.16,1,0.3,1);
+}
+
+.ally-card:hover { transform: translateY(-8px); }
+
+.ally-card-inner {
+  background: var(--navy-panel);
+  border: 1px solid rgba(168,180,192,0.1);
+  overflow: hidden;
+  position: relative;
+}
+
+.ally-avatar {
+  width: 100%;
+  padding-top: 110%;
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(135deg, var(--navy-light), var(--navy-mid));
+}
+
+.ally-avatar-bg {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ally-avatar-silhouette {
+  width: 60%;
+  opacity: 0.15;
+  filter: blur(1px);
+}
+
+.ally-avatar-icon {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 8rem;
+  color: rgba(255,255,255,0.04);
+  letter-spacing: -0.05em;
+}
+
+.ally-badge {
+  position: absolute;
+  top: 16px; left: 16px;
+  background: var(--crimson);
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  color: #fff;
+  padding: 3px 10px;
+  text-transform: uppercase;
+}
+
+.ally-info {
+  padding: 24px;
+  border-top: 1px solid rgba(168,180,192,0.08);
+}
+
+.ally-codename {
+  font-size: 0.65rem;
+  letter-spacing: 0.4em;
+  color: var(--crimson);
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+
+.ally-name {
+  font-family: 'Oswald', sans-serif;
+  font-size: 1.5rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  color: var(--white);
+  margin-bottom: 12px;
+}
+
+.ally-desc {
+  font-size: 0.82rem;
+  line-height: 1.6;
+  color: var(--silver);
+}
+
+.ally-reveal {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.5s cubic-bezier(0.16,1,0.3,1);
+}
+
+.ally-card:hover .ally-reveal { max-height: 100px; }
+
+.ally-reveal-inner {
+  padding: 16px 24px;
+  border-top: 1px solid rgba(196,30,58,0.2);
+  background: rgba(196,30,58,0.03);
+}
+
+.ally-reveal-text {
+  font-size: 0.78rem;
+  color: var(--silver-light);
+  line-height: 1.6;
+}
+
+/* ===== ENEMIES SECTION ===== */
+.enemies-section {
+  background: linear-gradient(180deg, var(--navy) 0%, #0a0612 100%);
+}
+
+.enemies-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px;
+}
+
+.enemy-card {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  border: 1px solid rgba(196,30,58,0.15);
+  background: linear-gradient(135deg, rgba(196,30,58,0.03), rgba(10,22,40,0.8));
+  position: relative;
+  overflow: hidden;
+  transition: all 0.4s cubic-bezier(0.16,1,0.3,1);
+  cursor: pointer;
+}
+
+.enemy-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(139,15,32,0.15), transparent);
+  opacity: 0;
+  transition: opacity 0.4s;
+}
+
+.enemy-card:hover { transform: scale(1.01); border-color: rgba(196,30,58,0.4); }
+.enemy-card:hover::before { opacity: 1; }
+.enemy-card:hover { box-shadow: 0 0 40px rgba(196,30,58,0.2), inset 0 0 40px rgba(196,30,58,0.05); }
+
+.enemy-avatar-area {
+  background: linear-gradient(135deg, #120008, #1a0010);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 180px;
+  position: relative;
+  overflow: hidden;
+}
+
+.enemy-avatar-area::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at center, rgba(196,30,58,0.1), transparent 70%);
+  animation: enemy-pulse 3s ease-in-out infinite;
+}
+
+@keyframes enemy-pulse {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 1; }
+}
+
+.enemy-icon-letter {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 5rem;
+  color: rgba(196,30,58,0.2);
+  position: relative;
+  z-index: 1;
+}
+
+.enemy-info {
+  padding: 28px 24px;
+}
+
+.enemy-threat {
+  font-size: 0.6rem;
+  letter-spacing: 0.35em;
+  color: var(--crimson-light);
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+
+.enemy-name {
+  font-family: 'Oswald', sans-serif;
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: var(--white);
+  margin-bottom: 8px;
+}
+
+.enemy-affiliation {
+  font-size: 0.75rem;
+  color: rgba(196,30,58,0.7);
+  letter-spacing: 0.1em;
+  margin-bottom: 12px;
+  text-transform: uppercase;
+}
+
+.enemy-desc {
+  font-size: 0.82rem;
+  line-height: 1.6;
+  color: rgba(168,180,192,0.7);
+}
+
+.enemy-threat-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.threat-label {
+  font-size: 0.6rem;
+  letter-spacing: 0.2em;
+  color: var(--silver-dark);
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.threat-meter {
+  flex: 1;
+  height: 3px;
+  background: rgba(255,255,255,0.05);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.threat-fill {
+  height: 100%;
+  background: linear-gradient(to right, var(--crimson-dark), var(--crimson-light));
+  border-radius: 2px;
+  animation: bar-fill 1.5s cubic-bezier(0.16,1,0.3,1) forwards;
+  transform: scaleX(0);
+  transform-origin: left;
+}
+
+/* ===== TIMELINE ===== */
+.timeline-section {
+  background: linear-gradient(180deg, #0a0612 0%, var(--navy) 100%);
+}
+
+.timeline-wrapper {
+  position: relative;
+  padding-left: 40px;
+}
+
+.timeline-line {
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 2px;
+  background: linear-gradient(to bottom, transparent, var(--crimson) 10%, var(--crimson) 90%, transparent);
+}
+
+.timeline-line::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, transparent, rgba(196,30,58,0.6), transparent);
+  animation: timeline-scan 3s ease-in-out infinite;
+}
+
+@keyframes timeline-scan {
+  0% { transform: translateY(-100%); }
+  100% { transform: translateY(100%); }
+}
+
+.timeline-item {
+  display: grid;
+  grid-template-columns: 120px 1fr;
+  gap: 32px;
+  margin-bottom: 40px;
+  position: relative;
+  opacity: 0;
+  transform: translateX(-20px);
+  transition: all 0.6s cubic-bezier(0.16,1,0.3,1);
+}
+
+.timeline-item.visible {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.timeline-dot {
+  position: absolute;
+  left: -47px; top: 12px;
+  width: 14px; height: 14px;
+  border-radius: 50%;
+  background: var(--crimson);
+  border: 2px solid var(--navy);
+  box-shadow: 0 0 10px var(--crimson), 0 0 20px rgba(196,30,58,0.4);
+}
+
+.timeline-year {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 2rem;
+  color: var(--crimson);
+  letter-spacing: 0.05em;
+  line-height: 1;
+  padding-top: 4px;
+  text-align: right;
+}
+
+.timeline-content {
+  padding: 20px 24px;
+  border-left: 1px solid rgba(196,30,58,0.2);
+  background: rgba(255,255,255,0.01);
+}
+
+.timeline-event {
+  font-family: 'Oswald', sans-serif;
+  font-size: 1.1rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  color: var(--white);
+  margin-bottom: 8px;
+  text-transform: uppercase;
+}
+
+.timeline-detail {
+  font-size: 0.85rem;
+  line-height: 1.6;
+  color: var(--silver);
+}
+
+/* ===== QUOTES ===== */
+.quotes-section {
+  background: var(--navy);
+}
+
+.quotes-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+
+.quote-card {
+  padding: 40px;
+  position: relative;
+  background: var(--navy-panel);
+  border: 1px solid rgba(168,180,192,0.06);
+  transition: all 0.4s;
+}
+
+.quote-card:hover {
+  border-color: rgba(196,30,58,0.2);
+  background: rgba(196,30,58,0.03);
+}
+
+.quote-mark {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 6rem;
+  color: rgba(196,30,58,0.12);
+  line-height: 0.7;
+  margin-bottom: 12px;
+}
+
+.quote-text {
+  font-family: 'Special Elite', serif;
+  font-size: 1.05rem;
+  line-height: 1.8;
+  color: var(--silver-light);
+  margin-bottom: 24px;
+  font-style: italic;
+}
+
+.quote-attribution {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.quote-dash {
+  width: 24px; height: 1px;
+  background: var(--crimson);
+}
+
+.quote-source {
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  color: var(--silver-dark);
+  text-transform: uppercase;
+}
+
+/* ===== COMICS SECTION ===== */
+.comics-section {
+  background: linear-gradient(180deg, var(--navy) 0%, #060c18 100%);
+  padding-bottom: 120px;
+}
+
+.comics-scroll-wrapper {
+  overflow-x: auto;
+  padding-bottom: 20px;
+  margin: 0 -48px;
+  padding: 0 48px 20px;
+  scrollbar-width: thin;
+  scrollbar-color: var(--crimson) var(--navy);
+}
+
+.comics-track {
+  display: flex;
+  gap: 20px;
+  width: max-content;
+}
+
+.comic-card {
+  width: 200px;
+  flex-shrink: 0;
+  cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.16,1,0.3,1);
+}
+
+.comic-card:hover {
+  transform: translateY(-8px) perspective(600px) rotateY(-5deg) rotateX(2deg);
+  filter: drop-shadow(-10px 20px 30px rgba(0,0,0,0.6));
+}
+
+.comic-cover {
+  width: 100%;
+  padding-top: 150%;
+  position: relative;
+  background: var(--navy-light);
+  border: 2px solid rgba(168,180,192,0.1);
+  overflow: hidden;
+}
+
+.comic-cover-inner {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.comic-cover-top {
+  height: 40%;
+  position: relative;
+  overflow: hidden;
+}
+
+.comic-cover-body {
+  flex: 1;
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+
+.comic-issue-num {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 3rem;
+  line-height: 0.9;
+  color: rgba(255,255,255,0.9);
+}
+
+.comic-title-text {
+  font-family: 'Oswald', sans-serif;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  color: rgba(255,255,255,0.7);
+  text-transform: uppercase;
+}
+
+.comic-year {
+  font-size: 0.65rem;
+  color: rgba(255,255,255,0.4);
+  letter-spacing: 0.2em;
+  margin-top: 2px;
+}
+
+.comic-info {
+  padding: 12px 4px;
+}
+
+.comic-info-title {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--silver);
+}
+
+.comic-info-year {
+  font-size: 0.7rem;
+  color: var(--silver-dark);
+  letter-spacing: 0.2em;
+}
+
+/* ===== SHIELD INTEL SECTION ===== */
+.shield-section {
+  background: linear-gradient(180deg, #060c18 0%, var(--navy-mid) 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+.shield-section::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: 
+    repeating-linear-gradient(0deg, transparent, transparent 49px, rgba(50,100,150,0.04) 49px, rgba(50,100,150,0.04) 50px),
+    repeating-linear-gradient(90deg, transparent, transparent 49px, rgba(50,100,150,0.04) 49px, rgba(50,100,150,0.04) 50px);
+  pointer-events: none;
+}
+
+.shield-hud {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 32px;
+}
+
+.radar-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+  background: var(--navy-panel);
+  border: 1px solid rgba(50,100,150,0.2);
+  position: relative;
+}
+
+.radar-svg {
+  width: 100%;
+  max-width: 280px;
+}
+
+.radar-sweep {
+  transform-origin: center;
+  animation: radar-sweep 4s linear infinite;
+}
+
+@keyframes radar-sweep {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.intel-panels {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.intel-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
+.intel-card {
+  background: var(--navy-panel);
+  border: 1px solid rgba(50,100,150,0.2);
+  padding: 20px;
+  position: relative;
+  overflow: hidden;
+}
+
+.intel-card::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(to right, transparent, rgba(50,100,200,0.5), transparent);
+  animation: data-line 2s ease-in-out infinite;
+}
+
+@keyframes data-line {
+  0%, 100% { transform: scaleX(0); }
+  50% { transform: scaleX(1); }
+}
+
+.intel-label {
+  font-size: 0.6rem;
+  letter-spacing: 0.35em;
+  color: rgba(100,160,220,0.6);
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+
+.intel-value {
+  font-family: 'Oswald', sans-serif;
+  font-size: 1.4rem;
+  font-weight: 500;
+  color: var(--white);
+  line-height: 1;
+}
+
+.intel-sub {
+  font-size: 0.72rem;
+  color: var(--silver-dark);
+  margin-top: 4px;
+}
+
+.intel-briefing {
+  background: var(--navy-panel);
+  border: 1px solid rgba(50,100,150,0.2);
+  padding: 28px;
+  position: relative;
+  grid-column: 1 / -1;
+}
+
+.briefing-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.briefing-indicator {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: var(--crimson);
+  box-shadow: 0 0 10px var(--crimson);
+  animation: blink 1s step-end infinite;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+.briefing-title {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.3em;
+  color: rgba(100,160,220,0.8);
+  text-transform: uppercase;
+}
+
+.briefing-text {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 0.9rem;
+  line-height: 1.8;
+  color: rgba(168,180,192,0.7);
+}
+
+.data-stream {
+  margin-top: 20px;
+  height: 40px;
+  position: relative;
+  overflow: hidden;
+  background: rgba(0,0,0,0.2);
+}
+
+.data-stream-inner {
+  position: absolute;
+  top: 0; left: 0;
+  white-space: nowrap;
+  font-family: 'Rajdhani', monospace;
+  font-size: 0.7rem;
+  color: rgba(50,150,100,0.6);
+  padding: 12px 0;
+  animation: data-scroll 20s linear infinite;
+}
+
+@keyframes data-scroll {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+/* ===== FOOTER ===== */
+footer {
+  background: #020609;
+  padding: 60px 0 40px;
+  border-top: 1px solid rgba(196,30,58,0.15);
+}
+
+.footer-inner {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 48px;
+  align-items: start;
+  margin-bottom: 40px;
+}
+
+.footer-brand {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 3rem;
+  letter-spacing: 0.05em;
+  line-height: 1;
+  color: var(--white);
+  margin-bottom: 12px;
+}
+
+.footer-brand span { color: var(--crimson); }
+
+.footer-tagline {
+  font-size: 0.8rem;
+  letter-spacing: 0.2em;
+  color: var(--silver-dark);
+  text-transform: uppercase;
+}
+
+.footer-links {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.footer-links a {
+  font-size: 0.78rem;
+  letter-spacing: 0.15em;
+  color: var(--silver-dark);
+  text-decoration: none;
+  text-transform: uppercase;
+  transition: color 0.2s;
+}
+
+.footer-links a:hover { color: var(--crimson); }
+
+.footer-bottom {
+  padding-top: 24px;
+  border-top: 1px solid rgba(255,255,255,0.04);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.footer-copy {
+  font-size: 0.7rem;
+  letter-spacing: 0.15em;
+  color: rgba(90,100,114,0.8);
+  text-transform: uppercase;
+}
+
+/* ===== REVEAL ANIMATIONS ===== */
+.reveal {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: all 0.8s cubic-bezier(0.16,1,0.3,1);
+}
+
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.reveal-left {
+  opacity: 0;
+  transform: translateX(-30px);
+  transition: all 0.8s cubic-bezier(0.16,1,0.3,1);
+}
+
+.reveal-left.visible {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* ===== SECTION BG DIVIDERS ===== */
+.stripe-divider {
+  height: 4px;
+  background: repeating-linear-gradient(90deg, var(--crimson) 0, var(--crimson) 50px, var(--navy) 50px, var(--navy) 60px, #fff 60px, #fff 110px, var(--navy) 110px, var(--navy) 120px);
+  opacity: 0.3;
+}
+
+/* === PARALLAX BG === */
+.parallax-bg {
+  position: absolute;
+  inset: 0;
+  background-size: 200px 200px;
+  background-image: 
+    radial-gradient(circle at 50px 50px, rgba(196,30,58,0.03) 2px, transparent 2px),
+    radial-gradient(circle at 150px 150px, rgba(50,100,200,0.03) 2px, transparent 2px);
+  pointer-events: none;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  .origin-grid { grid-template-columns: 1fr; }
+  .powers-grid { grid-template-columns: repeat(2, 1fr); }
+  .allies-grid { grid-template-columns: repeat(2, 1fr); }
+  .enemies-grid { grid-template-columns: 1fr; }
+  .quotes-grid { grid-template-columns: 1fr; }
+  .shield-hud { grid-template-columns: 1fr; }
+  .shield-container { width: 400px; height: 400px; }
+  nav { padding: 16px 24px; }
+  .container { padding: 0 24px; }
+  .comics-scroll-wrapper { margin: 0 -24px; padding: 0 24px 20px; }
+}
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-dot" id="cursorDot"></div>
+
+<canvas id="particles-canvas"></canvas>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">
+    <svg class="nav-shield" viewBox="0 0 100 100">
+      <circle cx="50" cy="50" r="48" fill="#c41e3a" stroke="#5a6472" stroke-width="2"/>
+      <circle cx="50" cy="50" r="36" fill="#ffffff" stroke="#5a6472" stroke-width="1.5"/>
+      <circle cx="50" cy="50" r="24" fill="#c41e3a" stroke="#5a6472" stroke-width="1.5"/>
+      <circle cx="50" cy="50" r="12" fill="#0a1628" stroke="#5a6472" stroke-width="1.5"/>
+      <polygon points="50,40 53,47 61,47 55,52 57,60 50,55 43,60 45,52 39,47 47,47" fill="white" transform="scale(0.7) translate(21.5,21.5)"/>
+    </svg>
+    <div class="nav-brand"><span>CAP</span>TAIN AMERICA</div>
+  </div>
+  <ul class="nav-links">
+    <li><a href="#origin">Origin</a></li>
+    <li><a href="#powers">Powers</a></li>
+    <li><a href="#allies">Allies</a></li>
+    <li><a href="#enemies">Enemies</a></li>
+    <li><a href="#shield">S.H.I.E.L.D.</a></li>
+  </ul>
+  <div class="nav-badge">AVENGER // CLASSIFIED</div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div id="particles-hero"></div>
+
+  <div class="shield-container">
+    <div class="shield-glow"></div>
+    <div class="shield-sweep"></div>
+    <svg class="shield-svg" viewBox="0 0 400 400">
+      <defs>
+        <radialGradient id="shieldGrad1" cx="40%" cy="35%">
+          <stop offset="0%" stop-color="#c41e3a"/>
+          <stop offset="100%" stop-color="#7a0e1e"/>
+        </radialGradient>
+        <radialGradient id="shieldGrad2" cx="40%" cy="35%">
+          <stop offset="0%" stop-color="#e8eef5"/>
+          <stop offset="100%" stop-color="#8a9ab0"/>
+        </radialGradient>
+        <radialGradient id="shieldGrad3" cx="40%" cy="35%">
+          <stop offset="0%" stop-color="#c41e3a"/>
+          <stop offset="100%" stop-color="#6a0c1a"/>
+        </radialGradient>
+        <radialGradient id="shieldGrad4" cx="40%" cy="35%">
+          <stop offset="0%" stop-color="#102040"/>
+          <stop offset="100%" stop-color="#050d1a"/>
+        </radialGradient>
+        <filter id="shieldGlow">
+          <feGaussianBlur stdDeviation="3" result="blur"/>
+          <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+      </defs>
+      <!-- Outer ring red -->
+      <circle cx="200" cy="200" r="190" fill="url(#shieldGrad1)" filter="url(#shieldGlow)"/>
+      <!-- White ring -->
+      <circle cx="200" cy="200" r="145" fill="url(#shieldGrad2)"/>
+      <!-- Inner red ring -->
+      <circle cx="200" cy="200" r="100" fill="url(#shieldGrad3)"/>
+      <!-- Center blue -->
+      <circle cx="200" cy="200" r="55" fill="url(#shieldGrad4)"/>
+      <!-- Star -->
+      <polygon points="200,155 212,188 248,188 220,208 230,242 200,222 170,242 180,208 152,188 188,188" fill="white" opacity="0.95"/>
+      <!-- Shine overlay -->
+      <ellipse cx="160" cy="140" rx="60" ry="40" fill="white" opacity="0.06" transform="rotate(-30, 160, 140)"/>
+    </svg>
+  </div>
+
+  <div class="hero-content">
+    <div class="hero-eyebrow">Marvel Character Archive — Classified File</div>
+    <div class="hero-title">Captain<br>America</div>
+    <div class="hero-subtitle">Steven Grant Rogers · The First Avenger</div>
+    <div class="hero-divider">
+      <div class="hero-divider-line"></div>
+      <svg class="hero-divider-star" viewBox="0 0 24 24">
+        <polygon points="12,2 15,9 22,9 17,14 19,21 12,17 5,21 7,14 2,9 9,9"/>
+      </svg>
+      <div class="hero-divider-line"></div>
+    </div>
+    <div class="hero-meta">USMC Super Soldier · Avengers Initiative · S.H.I.E.L.D. Director Level Alpha</div>
+  </div>
+
+  <div class="hero-scroll">
+    <span>Scroll</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<div class="stripe-divider"></div>
+
+<!-- MAIN -->
+<main>
+
+<!-- ORIGIN SECTION -->
+<section class="origin-section" id="origin">
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="section-num">01</div>
+      <div class="section-label">
+        <div class="section-label-top">Classified Dossier</div>
+        <div class="section-label-title">Origin Story</div>
+      </div>
+      <div class="section-line"></div>
+    </div>
+
+    <div class="origin-grid">
+      <div class="panel origin-document reveal">
+        <div class="panel-corner tl"></div>
+        <div class="panel-corner tr"></div>
+        <div class="panel-corner bl"></div>
+        <div class="panel-corner br"></div>
+        <div class="metal-scan"></div>
+
+        <!-- Watermark -->
+        <svg class="watermark-star" viewBox="0 0 100 100" fill="red">
+          <polygon points="50,5 61,35 95,35 68,57 79,91 50,70 21,91 32,57 5,35 39,35"/>
+        </svg>
+
+        <div class="doc-stamp">
+          <div class="doc-stamp-inner">TOP<br>SECRET<br>S.S.R.</div>
+        </div>
+
+        <div class="doc-header">
+          <div class="doc-classification">// CLASSIFIED — EYES ONLY // PROJECT: REBIRTH //</div>
+          <div class="doc-title">The Super-Soldier Initiative:<br>Operation Rebirth Field Report</div>
+          <div class="doc-meta">
+            <div class="doc-meta-item">
+              <div class="doc-meta-label">Subject</div>
+              <div class="doc-meta-value">Rogers, Steven G.</div>
+            </div>
+            <div class="doc-meta-item">
+              <div class="doc-meta-label">Date</div>
+              <div class="doc-meta-value">March 3, 1943</div>
+            </div>
+            <div class="doc-meta-item">
+              <div class="doc-meta-label">File No.</div>
+              <div class="doc-meta-value">SSR-0012-ALPHA</div>
+            </div>
+            <div class="doc-meta-item">
+              <div class="doc-meta-label">Status</div>
+              <div class="doc-meta-value">ACTIVE</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="doc-divider"></div>
+
+        <div class="doc-body">
+          <p>Born on <span class="doc-highlight">July 4, 1918</span>, in Brooklyn, New York, Steven Grant Rogers was a frail young man of remarkable character who repeatedly attempted enlistment during the Second World War. Despite repeated medical rejections citing his physical limitations — asthma, heart arrhythmia, and sub-standard bone density — Rogers demonstrated <span class="doc-highlight">extraordinary determination and moral fortitude</span> that caught the attention of Dr. Abraham Erskine.</p>
+          <p>Selected for the <span class="doc-highlight">Strategic Scientific Reserve's Project Rebirth</span>, Rogers underwent experimental treatment with Dr. Erskine's Super-Soldier Serum combined with Vita-Ray exposure. The procedure was deemed a complete success, transforming his physiology to the absolute peak of human capability.</p>
+          <p>Following the assassination of Dr. Erskine by HYDRA operative Heinz Kruger, Rogers became the <span class="doc-highlight">sole successful super-soldier ever created</span>. Armed with an indestructible Vibranium shield and unwavering courage, he was deployed as <em>Captain America</em> — symbol of liberty and protector of the free world.</p>
+          <p>Subject recovered from Arctic submersion in <span class="doc-highlight">2011</span> after 66 years of cryogenic stasis. Physiological integrity: 100%. Psychological assessment: remarkably stable. Threat classification: Omega-level Allied asset.</p>
+        </div>
+      </div>
+
+      <div class="origin-sidebar reveal">
+        <div class="stat-card">
+          <div class="stat-label">Height / Weight</div>
+          <div class="stat-value">6'2" / 240lbs</div>
+          <div class="stat-sub">Post-serum augmentation</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Strength Level</div>
+          <div class="stat-value">Peak Human+</div>
+          <div class="stat-sub">Can lift 1,100+ lbs overhead</div>
+          <div class="stat-bar"><div class="stat-bar-fill" style="width:92%"></div></div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Speed / Agility</div>
+          <div class="stat-value">60mph Sprint</div>
+          <div class="stat-sub">Top sprinting recorded speed</div>
+          <div class="stat-bar"><div class="stat-bar-fill" style="width:88%"></div></div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Durability</div>
+          <div class="stat-value">Extreme</div>
+          <div class="stat-sub">Accelerated cellular regeneration</div>
+          <div class="stat-bar"><div class="stat-bar-fill" style="width:85%"></div></div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Intelligence</div>
+          <div class="stat-value">Genius-tier IQ</div>
+          <div class="stat-sub">Master tactician & strategist</div>
+          <div class="stat-bar"><div class="stat-bar-fill" style="width:90%"></div></div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Affiliation</div>
+          <div class="stat-value">Avengers</div>
+          <div class="stat-sub">S.H.I.E.L.D. — S.S.R. — Howling Commandos</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="stripe-divider"></div>
+
+<!-- POWERS -->
+<section class="powers-section" id="powers">
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="section-num">02</div>
+      <div class="section-label">
+        <div class="section-label-top">Augmented Biology</div>
+        <div class="section-label-title">Powers & Abilities</div>
+      </div>
+      <div class="section-line"></div>
+    </div>
+
+    <div class="powers-grid reveal">
+      <div class="power-cell">
+        <svg class="power-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M13 10V3L4 14h7v7l9-11h-7z"/>
+        </svg>
+        <div class="power-name">Super Strength</div>
+        <div class="power-desc">The Super-Soldier Serum pushed Rogers' musculature to the absolute peak of human evolution. He routinely overpowers opponents several times his size with minimal effort.</div>
+        <div class="power-level">
+          <div class="power-pip active"></div><div class="power-pip active"></div><div class="power-pip active"></div><div class="power-pip active"></div><div class="power-pip active"></div>
+        </div>
+      </div>
+      <div class="power-cell">
+        <svg class="power-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+        </svg>
+        <div class="power-name">Enhanced Durability</div>
+        <div class="power-desc">His skeletal structure and musculature provide resistance to physical trauma far exceeding normal human limits. Minor wounds heal within minutes, major injuries in hours.</div>
+        <div class="power-level">
+          <div class="power-pip active"></div><div class="power-pip active"></div><div class="power-pip active"></div><div class="power-pip active"></div><div class="power-pip"></div>
+        </div>
+      </div>
+      <div class="power-cell">
+        <svg class="power-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/>
+        </svg>
+        <div class="power-name">Accelerated Healing</div>
+        <div class="power-desc">Rogers heals at a rate many times faster than normal humans. He is immune to all known diseases, toxins, and even has a greatly diminished rate of aging.</div>
+        <div class="power-level">
+          <div class="power-pip active"></div><div class="power-pip active"></div><div class="power-pip active"></div><div class="power-pip active"></div><div class="power-pip"></div>
+        </div>
+      </div>
+      <div class="power-cell">
+        <svg class="power-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>
+        </svg>
+        <div class="power-name">Tactical Genius</div>
+        <div class="power-desc">Rogers' strategic acumen is considered among the finest in human history. He can devise and execute complex battle strategies in seconds, adapting fluidly to any combat scenario.</div>
+        <div class="power-level">
+          <div class="power-pip active"></div><div class="power-pip active"></div><div class="power-pip active"></div><div class="power-pip active"></div><div class="power-pip active"></div>
+        </div>
+      </div>
+      <div class="power-cell">
+        <svg class="power-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+        </svg>
+        <div class="power-name">Indomitable Will</div>
+        <div class="power-desc">Rogers' mental resilience is legendarily immune to fear, despair, and psychic manipulation. His willpower has allowed him to resist mind control that would incapacitate any other individual.</div>
+        <div class="power-level">
+          <div class="power-pip active"></div><div class="power-pip active"></div><div class="power-pip active"></div><div class="power-pip active"></div><div class="power-pip active"></div>
+        </div>
+      </div>
+      <div class="power-cell">
+        <svg class="power-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <circle cx="12" cy="12" r="10"/><path d="M4.93 4.93l14.14 14.14"/>
+        </svg>
+        <div class="power-name">Vibranium Shield</div>
+        <div class="power-desc">His circular shield, forged from a Vibranium-iron alloy, is virtually indestructible. It absorbs kinetic energy and can be used as both defensive cover and an offensive ricocheting projectile.</div>
+        <div class="power-level">
+          <div class="power-pip active"></div><div class="power-pip active"></div><div class="power-pip active"></div><div class="power-pip active"></div><div class="power-pip active"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="stripe-divider"></div>
+
+<!-- ALLIES -->
+<section class="allies-section" id="allies">
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="section-num">03</div>
+      <div class="section-label">
+        <div class="section-label-top">Allied Forces</div>
+        <div class="section-label-title">Allies & Companions</div>
+      </div>
+      <div class="section-line"></div>
+    </div>
+
+    <div class="allies-grid">
+      <div class="ally-card reveal">
+        <div class="ally-card-inner">
+          <div class="ally-avatar">
+            <div class="ally-avatar-icon">B</div>
+            <div style="position:absolute;inset:0;background:linear-gradient(135deg,#0a1628,#0d2040);display:flex;align-items:center;justify-content:center;">
+              <svg viewBox="0 0 200 200" width="120" height="120" opacity="0.15">
+                <circle cx="100" cy="70" r="40" fill="white"/>
+                <path d="M40 180 Q100 120 160 180" fill="white"/>
+              </svg>
+              <div style="position:absolute;bottom:20px;right:20px;width:50px;height:50px;border-radius:50%;background:linear-gradient(135deg,#8a9ab0,#5a6070);display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:1.5rem;color:#0a1628">WS</div>
+            </div>
+            <div class="ally-badge">Ally · Tier 1</div>
+          </div>
+          <div class="ally-info">
+            <div class="ally-codename">THE WINTER SOLDIER</div>
+            <div class="ally-name">Bucky Barnes</div>
+            <div class="ally-desc">Rogers' oldest friend and wartime partner. Believed killed in action in 1945, Barnes was recovered and weaponized by the Soviet Union as the deadly Winter Soldier assassin before being reclaimed by his true self.</div>
+          </div>
+          <div class="ally-reveal">
+            <div class="ally-reveal-inner">
+              <div class="ally-reveal-text">Bionic left arm · Master combatant · Expert marksman. Served as the second Captain America under Rogers' mentorship. Now operates as the White Wolf.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="ally-card reveal">
+        <div class="ally-card-inner">
+          <div class="ally-avatar">
+            <div style="position:absolute;inset:0;background:linear-gradient(135deg,#1a2a10,#0d2030);display:flex;align-items:center;justify-content:center;">
+              <svg viewBox="0 0 200 200" width="120" height="120" opacity="0.12">
+                <circle cx="100" cy="70" r="40" fill="white"/>
+                <path d="M40 180 Q100 120 160 180" fill="white"/>
+                <polygon points="100,30 120,90 60,55 140,55 80,90" fill="white" transform="translate(0,-30)"/>
+              </svg>
+              <div style="position:absolute;bottom:20px;right:20px;width:50px;height:50px;border-radius:50%;background:linear-gradient(135deg,#c41e3a,#7a0e1e);display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:1.1rem;color:white">CA</div>
+            </div>
+            <div class="ally-badge">Ally · Tier 1</div>
+          </div>
+          <div class="ally-info">
+            <div class="ally-codename">CAPTAIN AMERICA II</div>
+            <div class="ally-name">Sam Wilson</div>
+            <div class="ally-desc">A pararescue veteran and aerial combatant using a specialized EXO-7 Falcon wing suit. Wilson was personally chosen by Rogers to inherit the mantle of Captain America, trusting him with the Vibranium shield itself.</div>
+          </div>
+          <div class="ally-reveal">
+            <div class="ally-reveal-inner">
+              <div class="ally-reveal-text">EXO-7 Falcon wingsuit · Redwing drone · Expert aerial combatant. Officially the fourth individual to hold the Captain America title and the most trusted successor.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="ally-card reveal">
+        <div class="ally-card-inner">
+          <div class="ally-avatar">
+            <div style="position:absolute;inset:0;background:linear-gradient(135deg,#200a18,#0d1830);display:flex;align-items:center;justify-content:center;">
+              <svg viewBox="0 0 200 200" width="120" height="120" opacity="0.12">
+                <circle cx="100" cy="70" r="40" fill="white"/>
+                <path d="M40 180 Q100 120 160 180" fill="white"/>
+              </svg>
+              <div style="position:absolute;bottom:20px;right:20px;width:50px;height:50px;border-radius:50%;background:linear-gradient(135deg,#b8860b,#8b6508);display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:1.1rem;color:white">PC</div>
+            </div>
+            <div class="ally-badge">Ally · S.S.R.</div>
+          </div>
+          <div class="ally-info">
+            <div class="ally-codename">SSR DIRECTOR</div>
+            <div class="ally-name">Peggy Carter</div>
+            <div class="ally-desc">A founding member of S.H.I.E.L.D. and one of the SSR's most formidable field agents. Carter was Rogers' closest companion and romantic interest during World War II, sharing his vision of a just world.</div>
+          </div>
+          <div class="ally-reveal">
+            <div class="ally-reveal-inner">
+              <div class="ally-reveal-text">Master spy & intelligence officer · Founder of S.H.I.E.L.D. · Expert hand-to-hand combatant. Established the modern global intelligence framework still used today.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="stripe-divider"></div>
+
+<!-- ENEMIES -->
+<section class="enemies-section" id="enemies">
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="section-num">04</div>
+      <div class="section-label">
+        <div class="section-label-top">Threat Assessment</div>
+        <div class="section-label-title">Adversaries</div>
+      </div>
+      <div class="section-line"></div>
+    </div>
+
+    <div class="enemies-grid">
+      <div class="enemy-card reveal">
+        <div class="enemy-avatar-area">
+          <div class="enemy-icon-letter">RS</div>
+        </div>
+        <div class="enemy-info">
+          <div class="enemy-threat">// THREAT LEVEL: OMEGA //</div>
+          <div class="enemy-name">Red Skull</div>
+          <div class="enemy-affiliation">HYDRA — Nazi Germany Division</div>
+          <div class="enemy-desc">Johann Schmidt, a failed super-soldier himself, serves as HYDRA's supreme commander. The Red Skull is Captain America's greatest nemesis — a dark reflection of everything Rogers stands against. His obsession with the Tesseract makes him a cosmic-level threat.</div>
+          <div class="enemy-threat-bar">
+            <div class="threat-label">Threat</div>
+            <div class="threat-meter"><div class="threat-fill" style="width:98%"></div></div>
+          </div>
+        </div>
+      </div>
+      <div class="enemy-card reveal">
+        <div class="enemy-avatar-area">
+          <div class="enemy-icon-letter">HY</div>
+        </div>
+        <div class="enemy-info">
+          <div class="enemy-threat">// THREAT LEVEL: EXTREME //</div>
+          <div class="enemy-name">HYDRA</div>
+          <div class="enemy-affiliation">Global Terrorist Network</div>
+          <div class="enemy-desc">HYDRA is a leaderless fascist organization that survived the fall of the Nazi regime, infiltrating world governments and intelligence agencies for decades. Their motto: "Cut off one head, two more shall take its place." Their deepest infiltration reached S.H.I.E.L.D. itself.</div>
+          <div class="enemy-threat-bar">
+            <div class="threat-label">Threat</div>
+            <div class="threat-meter"><div class="threat-fill" style="width:92%"></div></div>
+          </div>
+        </div>
+      </div>
+      <div class="enemy-card reveal">
+        <div class="enemy-avatar-area">
+          <div class="enemy-icon-letter">BA</div>
+        </div>
+        <div class="enemy-info">
+          <div class="enemy-threat">// THREAT LEVEL: ALPHA //</div>
+          <div class="enemy-name">Baron Zemo</div>
+          <div class="enemy-affiliation">Former EKO Scorpio Cell Leader</div>
+          <div class="enemy-desc">Helmut Zemo is a Sokovian colonel who orchestrated the collapse of the Avengers through psychological warfare rather than brute force. His intellect and personal vendetta drove him to fracture Earth's mightiest heroes without possessing a single superpower himself.</div>
+          <div class="enemy-threat-bar">
+            <div class="threat-label">Threat</div>
+            <div class="threat-meter"><div class="threat-fill" style="width:80%"></div></div>
+          </div>
+        </div>
+      </div>
+      <div class="enemy-card reveal">
+        <div class="enemy-avatar-area">
+          <div class="enemy-icon-letter">CR</div>
+        </div>
+        <div class="enemy-info">
+          <div class="enemy-threat">// THREAT LEVEL: ALPHA //</div>
+          <div class="enemy-name">Crossbones</div>
+          <div class="enemy-affiliation">Former S.H.I.E.L.D. — HYDRA Asset</div>
+          <div class="enemy-desc">Brock Rumlow, a former S.T.R.I.K.E. commander turned HYDRA mercenary, underwent body augmentation to become Crossbones. His brutal hand-to-hand combat skills and arsenal of explosive weaponry have made him one of Rogers' most physically dangerous opponents.</div>
+          <div class="enemy-threat-bar">
+            <div class="threat-label">Threat</div>
+            <div class="threat-meter"><div class="threat-fill" style="width:75%"></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="stripe-divider"></div>
+
+<!-- TIMELINE -->
+<section class="timeline-section" id="timeline">
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="section-num">05</div>
+      <div class="section-label">
+        <div class="section-label-top">Chronological Record</div>
+        <div class="section-label-title">Timeline</div>
+      </div>
+      <div class="section-line"></div>
+    </div>
+
+    <div class="timeline-wrapper">
+      <div class="timeline-line"></div>
+
+      <div class="timeline-item">
+        <div class="timeline-dot"></div>
+        <div class="timeline-year">1918</div>
+        <div class="timeline-content">
+          <div class="timeline-event">Birth of Steven Grant Rogers</div>
+          <div class="timeline-detail">Born July 4th, 1918, in Brooklyn, New York. Parents Joseph and Sarah Rogers. An only child raised in poverty, Steve grew up fighting injustice even as a small, sickly boy.</div>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="timeline-dot"></div>
+        <div class="timeline-year">1943</div>
+        <div class="timeline-content">
+          <div class="timeline-event">Operation Rebirth — Super-Soldier Transformation</div>
+          <div class="timeline-detail">Selected by Dr. Abraham Erskine for Project Rebirth after repeatedly failed enlistment attempts. The Super-Soldier Serum and Vita-Ray procedure successfully transforms Steve Rogers into the pinnacle of human biology.</div>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="timeline-dot"></div>
+        <div class="timeline-year">1944</div>
+        <div class="timeline-content">
+          <div class="timeline-event">Liberation of HYDRA POW Camp — The Howling Commandos</div>
+          <div class="timeline-detail">Rogers single-handedly infiltrates a HYDRA facility in Austria, liberating 400 Allied soldiers including Bucky Barnes. He forms the elite Howling Commandos unit to strike HYDRA operations across Europe.</div>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="timeline-dot"></div>
+        <div class="timeline-year">1945</div>
+        <div class="timeline-content">
+          <div class="timeline-event">Sacrifice Over the Atlantic — Presumed KIA</div>
+          <div class="timeline-detail">To prevent the detonation of a HYDRA bomber over populated areas, Rogers crashes the Valkyrie aircraft into the Arctic Ocean. Listed as killed in action. The world mourns its greatest hero.</div>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="timeline-dot"></div>
+        <div class="timeline-year">2011</div>
+        <div class="timeline-content">
+          <div class="timeline-event">Recovery From Arctic Stasis — Awakening in the 21st Century</div>
+          <div class="timeline-detail">S.H.I.E.L.D. recovers Rogers from the ice, perfectly preserved by the serum. He awakens in New York, adapting to a world 66 years ahead of the one he sacrificed himself to protect.</div>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="timeline-dot"></div>
+        <div class="timeline-year">2012</div>
+        <div class="timeline-content">
+          <div class="timeline-event">Battle of New York — The Avengers Initiative</div>
+          <div class="timeline-detail">Rogers leads Earth's first assembled superhero team — the Avengers — against Loki's Chitauri invasion of New York City, successfully defending the planet and cementing the Avengers as the world's first line of defense.</div>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="timeline-dot"></div>
+        <div class="timeline-year">2016</div>
+        <div class="timeline-content">
+          <div class="timeline-event">Civil War — The Sokovia Accords Conflict</div>
+          <div class="timeline-detail">Rogers refuses to sign the Sokovia Accords, believing heroes must remain free to act on their conscience rather than under government control. This principle fractures the Avengers and forces Rogers underground as a fugitive.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="stripe-divider"></div>
+
+<!-- QUOTES -->
+<section class="quotes-section" id="quotes">
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="section-num">06</div>
+      <div class="section-label">
+        <div class="section-label-top">Recorded Statements</div>
+        <div class="section-label-title">Famous Quotes</div>
+      </div>
+      <div class="section-line"></div>
+    </div>
+
+    <div class="quotes-grid">
+      <div class="quote-card reveal">
+        <div class="panel-corner tl"></div>
+        <div class="panel-corner br"></div>
+        <div class="quote-mark">"</div>
+        <div class="quote-text">I can do this all day.</div>
+        <div class="quote-attribution">
+          <div class="quote-dash"></div>
+          <div class="quote-source">Steve Rogers, multiple recorded instances</div>
+        </div>
+      </div>
+      <div class="quote-card reveal">
+        <div class="panel-corner tl"></div>
+        <div class="panel-corner br"></div>
+        <div class="quote-mark">"</div>
+        <div class="quote-text">The price of freedom is high. It always has been. And it's a price I'm willing to pay. And if I'm the only one, then so be it.</div>
+        <div class="quote-attribution">
+          <div class="quote-dash"></div>
+          <div class="quote-source">Captain America · The Winter Soldier, 2014</div>
+        </div>
+      </div>
+      <div class="quote-card reveal">
+        <div class="panel-corner tl"></div>
+        <div class="panel-corner br"></div>
+        <div class="quote-mark">"</div>
+        <div class="quote-text">I don't want to kill anyone. I don't like bullies; I don't care where they're from.</div>
+        <div class="quote-attribution">
+          <div class="quote-dash"></div>
+          <div class="quote-source">Steve Rogers · The First Avenger, 1943</div>
+        </div>
+      </div>
+      <div class="quote-card reveal">
+        <div class="panel-corner tl"></div>
+        <div class="panel-corner br"></div>
+        <div class="quote-mark">"</div>
+        <div class="quote-text">Whatever happens tomorrow, you must promise me one thing. That you will stay who you are. Not a perfect soldier, but a good man.</div>
+        <div class="quote-attribution">
+          <div class="quote-dash"></div>
+          <div class="quote-source">Dr. Abraham Erskine to Steve Rogers · 1943</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="stripe-divider"></div>
+
+<!-- COMICS -->
+<section class="comics-section" id="comics">
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="section-num">07</div>
+      <div class="section-label">
+        <div class="section-label-top">Publication Archive</div>
+        <div class="section-label-title">Featured Comics</div>
+      </div>
+      <div class="section-line"></div>
+    </div>
+  </div>
+
+  <div class="comics-scroll-wrapper reveal">
+    <div class="comics-track">
+
+      <!-- Comic 1 -->
+      <div class="comic-card">
+        <div class="comic-cover">
+          <div class="comic-cover-inner">
+            <div class="comic-cover-top" style="background:linear-gradient(135deg,#c41e3a,#7a0e1e);">
+              <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:1rem;color:rgba(255,255,255,0.9);letter-spacing:0.1em;">MARVEL COMICS</div>
+              <div style="position:absolute;bottom:0;left:0;right:0;height:3px;background:#fff;"></div>
+            </div>
+            <div class="comic-cover-body" style="background:linear-gradient(#0a1628,#050d1a);">
+              <div style="position:absolute;inset:40% 0 0 0;display:flex;align-items:center;justify-content:center;opacity:0.08;font-family:'Bebas Neue',sans-serif;font-size:4rem;color:white;">★</div>
+              <div class="comic-issue-num">#1</div>
+              <div class="comic-title-text">Captain America</div>
+              <div class="comic-year">1941</div>
+            </div>
+          </div>
+        </div>
+        <div class="comic-info">
+          <div class="comic-info-title">The Origin Issue</div>
+          <div class="comic-info-year">// 1941</div>
+        </div>
+      </div>
+
+      <!-- Comic 2 -->
+      <div class="comic-card">
+        <div class="comic-cover">
+          <div class="comic-cover-inner">
+            <div class="comic-cover-top" style="background:linear-gradient(135deg,#102040,#0a1628);">
+              <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:1rem;color:rgba(255,255,255,0.9);letter-spacing:0.1em;">MARVEL COMICS</div>
+              <div style="position:absolute;bottom:0;left:0;right:0;height:3px;background:#c41e3a;"></div>
+            </div>
+            <div class="comic-cover-body" style="background:linear-gradient(#c41e3a,#7a0e1e);">
+              <div class="comic-issue-num">#117</div>
+              <div class="comic-title-text">The Falcon Flies</div>
+              <div class="comic-year">1969</div>
+            </div>
+          </div>
+        </div>
+        <div class="comic-info">
+          <div class="comic-info-title">Falcon's Debut</div>
+          <div class="comic-info-year">// 1969</div>
+        </div>
+      </div>
+
+      <!-- Comic 3 -->
+      <div class="comic-card">
+        <div class="comic-cover">
+          <div class="comic-cover-inner">
+            <div class="comic-cover-top" style="background:linear-gradient(135deg,#1a1a1a,#0a0a0a);">
+              <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:1rem;color:rgba(255,255,255,0.9);letter-spacing:0.1em;">MARVEL COMICS</div>
+              <div style="position:absolute;bottom:0;left:0;right:0;height:3px;background:#c8a862;"></div>
+            </div>
+            <div class="comic-cover-body" style="background:linear-gradient(#2a2a3a,#0a0a16);">
+              <div class="comic-issue-num">#25</div>
+              <div class="comic-title-text">The Death of Cap</div>
+              <div class="comic-year">2007</div>
+            </div>
+          </div>
+        </div>
+        <div class="comic-info">
+          <div class="comic-info-title">Civil War Aftermath</div>
+          <div class="comic-info-year">// 2007</div>
+        </div>
+      </div>
+
+      <!-- Comic 4 -->
+      <div class="comic-card">
+        <div class="comic-cover">
+          <div class="comic-cover-inner">
+            <div class="comic-cover-top" style="background:linear-gradient(135deg,#c41e3a,#0a1628);">
+              <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:1rem;color:rgba(255,255,255,0.9);letter-spacing:0.1em;">MARVEL COMICS</div>
+              <div style="position:absolute;bottom:0;left:0;right:0;height:3px;background:#fff;"></div>
+            </div>
+            <div class="comic-cover-body" style="background:linear-gradient(#102040,#050d1a);">
+              <div class="comic-issue-num">#600</div>
+              <div class="comic-title-text">Reborn</div>
+              <div class="comic-year">2009</div>
+            </div>
+          </div>
+        </div>
+        <div class="comic-info">
+          <div class="comic-info-title">Rogers Returns</div>
+          <div class="comic-info-year">// 2009</div>
+        </div>
+      </div>
+
+      <!-- Comic 5 -->
+      <div class="comic-card">
+        <div class="comic-cover">
+          <div class="comic-cover-inner">
+            <div class="comic-cover-top" style="background:linear-gradient(135deg,#002060,#0a1628);">
+              <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:1rem;color:rgba(255,255,255,0.9);letter-spacing:0.1em;">MARVEL COMICS</div>
+              <div style="position:absolute;bottom:0;left:0;right:0;height:3px;background:#c41e3a;"></div>
+            </div>
+            <div class="comic-cover-body" style="background:linear-gradient(#c41e3a,#5a0010);">
+              <div class="comic-issue-num">#1</div>
+              <div class="comic-title-text">All-New All-Different</div>
+              <div class="comic-year">2015</div>
+            </div>
+          </div>
+        </div>
+        <div class="comic-info">
+          <div class="comic-info-title">Sam Wilson Takes Shield</div>
+          <div class="comic-info-year">// 2015</div>
+        </div>
+      </div>
+
+      <!-- Comic 6 -->
+      <div class="comic-card">
+        <div class="comic-cover">
+          <div class="comic-cover-inner">
+            <div class="comic-cover-top" style="background:linear-gradient(135deg,#3a2000,#1a0800);">
+              <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:1rem;color:rgba(255,255,255,0.9);letter-spacing:0.1em;">MARVEL COMICS</div>
+              <div style="position:absolute;bottom:0;left:0;right:0;height:3px;background:#c8a862;"></div>
+            </div>
+            <div class="comic-cover-body" style="background:linear-gradient(#c8a862,#6a5010);">
+              <div class="comic-issue-num">#700</div>
+              <div class="comic-title-text">Man Out of Time</div>
+              <div class="comic-year">2018</div>
+            </div>
+          </div>
+        </div>
+        <div class="comic-info">
+          <div class="comic-info-title">Legacy Issue</div>
+          <div class="comic-info-year">// 2018</div>
+        </div>
+      </div>
+
+      <!-- Comic 7 -->
+      <div class="comic-card">
+        <div class="comic-cover">
+          <div class="comic-cover-inner">
+            <div class="comic-cover-top" style="background:linear-gradient(135deg,#0a4020,#051a0a);">
+              <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:1rem;color:rgba(255,255,255,0.9);letter-spacing:0.1em;">MARVEL COMICS</div>
+              <div style="position:absolute;bottom:0;left:0;right:0;height:3px;background:#c41e3a;"></div>
+            </div>
+            <div class="comic-cover-body" style="background:linear-gradient(#0a1628,#050d1a);">
+              <div class="comic-issue-num">#50</div>
+              <div class="comic-title-text">Winter Kills</div>
+              <div class="comic-year">2012</div>
+            </div>
+          </div>
+        </div>
+        <div class="comic-info">
+          <div class="comic-info-title">Winter Soldier Arc</div>
+          <div class="comic-info-year">// 2012</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<div class="stripe-divider"></div>
+
+<!-- SHIELD INTEL -->
+<section class="shield-section" id="shield">
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="section-num">08</div>
+      <div class="section-label">
+        <div class="section-label-top">Intelligence Command</div>
+        <div class="section-label-title">S.H.I.E.L.D. Archive</div>
+      </div>
+      <div class="section-line"></div>
+    </div>
+
+    <div class="shield-hud reveal">
+      <!-- RADAR -->
+      <div class="radar-container">
+        <svg class="radar-svg" viewBox="0 0 280 280">
+          <defs>
+            <radialGradient id="radarGrad">
+              <stop offset="0%" stop-color="rgba(50,150,100,0.2)"/>
+              <stop offset="100%" stop-color="transparent"/>
+            </radialGradient>
+          </defs>
+          <!-- Grid circles -->
+          <circle cx="140" cy="140" r="120" fill="none" stroke="rgba(50,150,100,0.15)" stroke-width="1"/>
+          <circle cx="140" cy="140" r="90" fill="none" stroke="rgba(50,150,100,0.12)" stroke-width="1"/>
+          <circle cx="140" cy="140" r="60" fill="none" stroke="rgba(50,150,100,0.1)" stroke-width="1"/>
+          <circle cx="140" cy="140" r="30" fill="none" stroke="rgba(50,150,100,0.1)" stroke-width="1"/>
+          <!-- Cross lines -->
+          <line x1="20" y1="140" x2="260" y2="140" stroke="rgba(50,150,100,0.1)" stroke-width="1"/>
+          <line x1="140" y1="20" x2="140" y2="260" stroke="rgba(50,150,100,0.1)" stroke-width="1"/>
+          <line x1="55" y1="55" x2="225" y2="225" stroke="rgba(50,150,100,0.06)" stroke-width="1"/>
+          <line x1="225" y1="55" x2="55" y2="225" stroke="rgba(50,150,100,0.06)" stroke-width="1"/>
+          <!-- Sweep -->
+          <g class="radar-sweep">
+            <path d="M140,140 L140,20 A120,120 0 0,1 254,182 Z" fill="url(#radarGrad)" opacity="0.6"/>
+          </g>
+          <!-- Blips -->
+          <circle cx="180" cy="90" r="4" fill="rgba(50,220,100,0.9)">
+            <animate attributeName="opacity" values="1;0;1" dur="2s" repeatCount="indefinite"/>
+          </circle>
+          <circle cx="100" cy="160" r="3" fill="rgba(50,220,100,0.7)">
+            <animate attributeName="opacity" values="1;0;1" dur="3s" begin="0.5s" repeatCount="indefinite"/>
+          </circle>
+          <circle cx="200" cy="170" r="4" fill="rgba(196,30,58,0.9)">
+            <animate attributeName="opacity" values="1;0;1" dur="1.5s" begin="1s" repeatCount="indefinite"/>
+          </circle>
+          <circle cx="80" cy="100" r="3" fill="rgba(50,220,100,0.6)">
+            <animate attributeName="opacity" values="1;0;1" dur="2.5s" begin="0.8s" repeatCount="indefinite"/>
+          </circle>
+          <!-- Center -->
+          <circle cx="140" cy="140" r="6" fill="none" stroke="rgba(50,150,100,0.5)" stroke-width="1"/>
+          <circle cx="140" cy="140" r="2" fill="rgba(50,200,100,0.8)"/>
+          <!-- Labels -->
+          <text x="145" y="26" fill="rgba(50,150,100,0.5)" font-size="8" font-family="Rajdhani,sans-serif" letter-spacing="2">N</text>
+          <text x="257" y="144" fill="rgba(50,150,100,0.5)" font-size="8" font-family="Rajdhani,sans-serif">E</text>
+          <text x="145" y="268" fill="rgba(50,150,100,0.5)" font-size="8" font-family="Rajdhani,sans-serif" letter-spacing="2">S</text>
+          <text x="18" y="144" fill="rgba(50,150,100,0.5)" font-size="8" font-family="Rajdhani,sans-serif">W</text>
+        </svg>
+      </div>
+
+      <!-- Intel Panels -->
+      <div class="intel-panels">
+        <div class="intel-row">
+          <div class="intel-card">
+            <div class="intel-label">Active Missions</div>
+            <div class="intel-value">14</div>
+            <div class="intel-sub">Worldwide Operations</div>
+          </div>
+          <div class="intel-card">
+            <div class="intel-label">Threat Level</div>
+            <div class="intel-value">DELTA</div>
+            <div class="intel-sub">Elevated — Monitor</div>
+          </div>
+          <div class="intel-card">
+            <div class="intel-label">Assets Deployed</div>
+            <div class="intel-value">847</div>
+            <div class="intel-sub">Field Operatives</div>
+          </div>
+        </div>
+
+        <div class="intel-briefing">
+          <div class="briefing-header">
+            <div class="briefing-indicator"></div>
+            <div class="briefing-title">// LIVE INTELLIGENCE BRIEFING — DIRECTOR LEVEL CLEARANCE //</div>
+          </div>
+          <div class="briefing-text">
+            The Strategic Homeland Intervention, Enforcement and Logistics Division maintains active surveillance of all known HYDRA remnant cells across six continents. Following the events of Project Insight and the exposure of HYDRA's infiltration of S.H.I.E.L.D., the organization underwent a complete reformation. Current Director-level operatives continue to uphold Director Fury's original mandate: <strong style="color:rgba(168,180,192,0.95)">to protect and preserve the security of a vulnerable world from the threats it cannot yet see coming.</strong>
+          </div>
+          <div class="data-stream">
+            <div class="data-stream-inner">
+              ENCRYPTED // AES-4096 // SHIELD.GOV // CLEARANCE: OMEGA // AGENT ROGERS: PRIORITY ONE // AVENGERS PROTOCOL: ACTIVE // TESSERACT STATUS: SECURED // ASGARD LIAISON: OPEN // WAKANDA TREATY: RATIFIED // QUANTUM REALM RESEARCH: ONGOING // MULTIVERSE THREAT ASSESSMENT: IN PROGRESS // ENCRYPTED // AES-4096 // SHIELD.GOV // CLEARANCE: OMEGA // AGENT ROGERS: PRIORITY ONE // AVENGERS PROTOCOL: ACTIVE // TESSERACT STATUS: SECURED // ASGARD LIAISON: OPEN //
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <div>
+        <div class="footer-brand"><span>Captain</span><br>America</div>
+        <div class="footer-tagline">The First Avenger · Marvel Character Archive</div>
+      </div>
+      <div class="footer-links">
+        <a href="#origin">Origin Story</a>
+        <a href="#powers">Powers & Abilities</a>
+        <a href="#allies">Allies</a>
+        <a href="#enemies">Enemies</a>
+        <a href="#timeline">Timeline</a>
+        <a href="#shield">S.H.I.E.L.D. Intel</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="footer-copy">© Marvel Character Archive — Classified Intelligence Division</div>
+      <div class="footer-copy">I can do this all day.</div>
+    </div>
+  </div>
+</footer>
+
+<script>
+// ===== CUSTOM CURSOR =====
+const cursor = document.getElementById('cursor');
+const cursorDot = document.getElementById('cursorDot');
+let mx = 0, my = 0;
+
+document.addEventListener('mousemove', e => {
+  mx = e.clientX; my = e.clientY;
+  cursorDot.style.left = mx + 'px';
+  cursorDot.style.top = my + 'px';
+});
+
+function animateCursor() {
+  const cx = parseFloat(cursor.style.left) || mx;
+  const cy = parseFloat(cursor.style.top) || my;
+  cursor.style.left = (cx + (mx - cx) * 0.15) + 'px';
+  cursor.style.top = (cy + (my - cy) * 0.15) + 'px';
+  requestAnimationFrame(animateCursor);
+}
+animateCursor();
+
+document.querySelectorAll('a, button, .ally-card, .enemy-card, .comic-card, .power-cell').forEach(el => {
+  el.addEventListener('mouseenter', () => cursor.style.transform = 'translate(-50%, -50%) scale(1.8)');
+  el.addEventListener('mouseleave', () => cursor.style.transform = 'translate(-50%, -50%) scale(1)');
+});
+
+// ===== PARTICLES =====
+const canvas = document.getElementById('particles-canvas');
+const ctx = canvas.getContext('2d');
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+window.addEventListener('resize', () => {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+});
+
+const particles = [];
+const PARTICLE_COUNT = 80;
+
+class Particle {
+  constructor() { this.reset(); }
+  reset() {
+    this.x = Math.random() * canvas.width;
+    this.y = Math.random() * canvas.height;
+    this.size = Math.random() * 2 + 0.3;
+    this.speedX = (Math.random() - 0.5) * 0.4;
+    this.speedY = -Math.random() * 0.5 - 0.1;
+    this.life = 1;
+    this.decay = Math.random() * 0.003 + 0.001;
+    this.color = Math.random() > 0.7
+      ? `rgba(196,30,58,${Math.random() * 0.4 + 0.1})`
+      : `rgba(168,180,192,${Math.random() * 0.3 + 0.05})`;
+  }
+  update() {
+    this.x += this.speedX;
+    this.y += this.speedY;
+    this.life -= this.decay;
+    if (this.life <= 0 || this.y < 0) this.reset();
+  }
+  draw() {
+    ctx.save();
+    ctx.globalAlpha = this.life;
+    ctx.fillStyle = this.color;
+    ctx.beginPath();
+    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.restore();
+  }
+}
+
+for (let i = 0; i < PARTICLE_COUNT; i++) {
+  const p = new Particle();
+  p.y = Math.random() * canvas.height;
+  p.life = Math.random();
+  particles.push(p);
+}
+
+function animateParticles() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  particles.forEach(p => { p.update(); p.draw(); });
+  requestAnimationFrame(animateParticles);
+}
+animateParticles();
+
+// ===== SCROLL REVEAL =====
+const revealElements = document.querySelectorAll('.reveal, .reveal-left, .timeline-item');
+
+const revealObserver = new IntersectionObserver((entries) => {
+  entries.forEach((entry, i) => {
+    if (entry.isIntersecting) {
+      setTimeout(() => {
+        entry.target.classList.add('visible');
+      }, entry.target.dataset.delay || 0);
+    }
+  });
+}, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+
+revealElements.forEach((el, i) => {
+  if (el.classList.contains('reveal') || el.classList.contains('reveal-left')) {
+    el.dataset.delay = (i % 4) * 80;
+  }
+  revealObserver.observe(el);
+});
+
+// ===== PARALLAX =====
+window.addEventListener('scroll', () => {
+  const scrollY = window.scrollY;
+  const hero = document.querySelector('.hero');
+  if (hero) {
+    const shieldContainer = document.querySelector('.shield-container');
+    if (shieldContainer) {
+      shieldContainer.style.transform = `translate(-50%, calc(-50% + ${scrollY * 0.3}px))`;
+    }
+  }
+});
+
+// ===== STAT BARS ANIMATE ON SCROLL =====
+const statBars = document.querySelectorAll('.stat-bar-fill, .threat-fill');
+const barObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.style.animation = 'bar-fill 1.5s cubic-bezier(0.16,1,0.3,1) forwards';
+    }
+  });
+}, { threshold: 0.5 });
+
+statBars.forEach(bar => barObserver.observe(bar));
+
+// ===== METAL SHEEN ON PANELS =====
+document.querySelectorAll('.panel').forEach(panel => {
+  panel.addEventListener('mousemove', e => {
+    const rect = panel.getBoundingClientRect();
+    const x = (e.clientX - rect.left) / rect.width;
+    const y = (e.clientY - rect.top) / rect.height;
+    panel.style.background = `
+      radial-gradient(circle at ${x*100}% ${y*100}%, rgba(255,255,255,0.04) 0%, transparent 60%),
+      var(--navy-panel)
+    `;
+  });
+  panel.addEventListener('mouseleave', () => {
+    panel.style.background = '';
+  });
+});
+
+// ===== COMIC HORIZONTAL SCROLL WITH MOMENTUM =====
+const comicsWrapper = document.querySelector('.comics-scroll-wrapper');
+if (comicsWrapper) {
+  let isDown = false, startX, scrollLeftVal;
+  comicsWrapper.addEventListener('mousedown', e => {
+    isDown = true;
+    startX = e.pageX - comicsWrapper.offsetLeft;
+    scrollLeftVal = comicsWrapper.scrollLeft;
+    comicsWrapper.style.cursor = 'grabbing';
+  });
+  comicsWrapper.addEventListener('mouseleave', () => { isDown = false; comicsWrapper.style.cursor = 'default'; });
+  comicsWrapper.addEventListener('mouseup', () => { isDown = false; comicsWrapper.style.cursor = 'default'; });
+  comicsWrapper.addEventListener('mousemove', e => {
+    if (!isDown) return;
+    e.preventDefault();
+    const x = e.pageX - comicsWrapper.offsetLeft;
+    const walk = (x - startX) * 2;
+    comicsWrapper.scrollLeft = scrollLeftVal - walk;
+  });
+}
+
+// ===== NAV ACTIVE STATE =====
+window.addEventListener('scroll', () => {
+  const nav = document.querySelector('nav');
+  if (window.scrollY > 80) {
+    nav.style.background = 'rgba(5,13,26,0.98)';
+  } else {
+    nav.style.background = 'linear-gradient(to bottom, rgba(5,13,26,0.95), transparent)';
+  }
+});
+</script>
+</body>
+</html>
